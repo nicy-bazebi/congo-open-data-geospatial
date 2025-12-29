@@ -373,8 +373,8 @@
 
       <div class="brandText">
         <div class="institution">Institut Géographique National</div>
-        <div class="title">Portail Open Data Géospatial — République du Congo</div>
-        <div class="subtitle">Visualisation & téléchargement : limites administratives, chefs-lieux et réseau routier</div>
+        <div class="title">Portail Organisation Administrative — République du Congo</div>
+        <div class="subtitle">Visualisation & téléchargement : limites administratives, localités (chefs-lieux) et réseau routier structurant</div>
       </div>
     </div>
 
@@ -388,12 +388,7 @@
   <div class="wrap">
     <!-- PANEL -->
     <aside>
-      <div class="card">
-        <div class="cardTitle">Recherche <span class="pill" id="count">0</span></div>
-
-        <label class="label">Nom (ou code)</label>
-        <input id="q" placeholder="Ex : Bouenza, Brazzaville, Ngabé, RN1..." />
-
+      
         <div class="row">
           <div>
             <label class="label">Filtrer sur</label>
@@ -433,19 +428,10 @@
         <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux districts</span></label>
         <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
 
-        <div class="legendLine">
-          <span class="chip"><span class="swatch g"></span> OK</span>
-          <span class="chip"><span class="swatch y"></span> Attention</span>
-          <span class="chip"><span class="swatch r"></span> Erreur</span>
         </div>
       </div>
 
-      <div class="card">
-        <div class="cardTitle">Résultats</div>
-        <div class="results" id="results"></div>
-      </div>
-
-      <div class="card" id="downloads">
+  <div class="card" id="downloads">
         <div class="cardTitle">Téléchargements</div>
         <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web. Les liens pointent vers ton dossier <b>data/</b>.</div>
 
@@ -513,28 +499,28 @@
       {
         key: "Limites_departements_congo",
         label: "Limites départements",
-        geojson: "data/geojson/Limites_departements_congo/Limites_departements_congo.geojson",
+        geojson: "data/geojson/Limites_departements_congo/limites_departements_congo.geojson",
         toggleId: "t_dep",
         defaultVisible: true
       },
       {
         key: "Chef_lieu_departement",
         label: "Chefs-lieux départements",
-        geojson: "data/geojson/Chef_lieu_departement/Chef_lieu_departement.geojson",
+        geojson: "data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson",
         toggleId: "t_cld",
         defaultVisible: true
       },
       {
         key: "Chef_lieu_district",
         label: "Chefs-lieux districts",
-        geojson: "data/geojson/Chef_lieu_district/Chef_lieu_district.geojson",
+        geojson: "data/geojson/Chef_lieu_district/chef_lieu_district.geojson",
         toggleId: "t_cldist",
         defaultVisible: true
       },
       {
         key: "Reseau_routier_structurant",
         label: "Réseau routier structurant",
-        geojson: "data/geojson/Reseau_routier_structurant/Reseau_routier_structurant.geojson",
+        geojson: "data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson",
         toggleId: "t_routes",
         defaultVisible: false
       }
