@@ -1,0 +1,14 @@
+Description 
+Ce thème présente la localisation des chef-lieux de districts de la République du Congo. Circonscription administrative de proximité, le chef-lieu de district est la localité officiellement établie par la loi (notamment la Loi n° 3-2003) pour abriter le siège de la Sous-préfecture. Il représente l'échelon de relais entre le département et les communautés villageoises, fonctionnant sous l'autorité du Sous-préfet. Ce centre administratif assure la gestion de l'état civil, la sécurité publique locale et la supervision des services techniques de base, agissant comme le pivot de l'administration territoriale de contact en République du Congo, tel que défini par les textes sur l'organisation territoriale.
+
+Source
+• Textes officiels de création des entités administratives : Ministère de l’Intérieur et de la Décentralisation (MID)
+• Numérisation cartographique sur fond de la carte topographique du Congo au 1 : 200 000 (Geoconsult, 2015) : Institut Géographique National (IGN)
+
+Échelle : 1 : 200 000
+
+Contact : Direction scientifique – Institut Géographique National (IGN)
+
+Système de référence : WGS84 / EPSG : 4326
+
+Licence d’utilisation (ex. CC-BY 4.0)

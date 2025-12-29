@@ -1,0 +1,14 @@
+Description 
+Ce thème présente la localisation des chef-lieux de département de la République du Congo. Point de convergence de l'autorité étatique déconcentrée et décentralisée, le chef-lieu de département est la localité désignée par la Loi n° 3-2003 du 17 janvier 2003 comme siège de la Préfecture. Il constitue le centre administratif principal de la circonscription, servant de résidence officielle au Préfet et de base aux directions départementales ministérielles. En tant que pôle de commandement, il assure la coordination des politiques publiques et la tutelle des collectivités locales sur l'ensemble du territoire départemental, conformément au cadre fixé par la Constitution du 25 octobre 2015 et le Décret n° 2003-20.
+
+Source
+• Textes officiels de création des entités administratives : Ministère de l’Intérieur et de la Décentralisation (MID)
+• Numérisation cartographique sur fond de la carte topographique du Congo au 1 : 200 000 (Geoconsult, 2015) : Institut Géographique National (IGN)
+
+Échelle : 1 : 200 000
+
+Contact : Direction scientifique – Institut Géographique National (IGN)
+
+Système de référence : WGS84 / EPSG : 4326
+
+Licence d’utilisation (ex. CC-BY 4.0)
