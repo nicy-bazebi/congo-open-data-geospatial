@@ -1,0 +1,22 @@
+{
+"type": "FeatureCollection",
+"name": "chef_lieu_departement",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 1, "Id": 0, "Nom": "IMPFONDO" }, "geometry": { "type": "Point", "coordinates": [ 18.05841850282447, 1.613130867134977 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 2, "Id": 0, "Nom": "OUESSO" }, "geometry": { "type": "Point", "coordinates": [ 16.054665801387227, 1.609568436750259 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 3, "Id": 0, "Nom": "EWO" }, "geometry": { "type": "Point", "coordinates": [ 14.811214182882908, -0.873445541398 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 4, "Id": 0, "Nom": "OWANDO" }, "geometry": { "type": "Point", "coordinates": [ 15.897330573203449, -0.485565506482128 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 5, "Id": 0, "Nom": "DJAMBALA" }, "geometry": { "type": "Point", "coordinates": [ 14.75166603461726, -2.538767356287054 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 6, "Id": 0, "Nom": "KINKALA" }, "geometry": { "type": "Point", "coordinates": [ 14.760163574984478, -4.359594159896172 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 7, "Id": 0, "Nom": "MADINGOU" }, "geometry": { "type": "Point", "coordinates": [ 13.549329438351245, -4.166242433694427 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 8, "Id": 0, "Nom": "SIBITI" }, "geometry": { "type": "Point", "coordinates": [ 13.351402113490233, -3.6831245809706 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 9, "Id": 0, "Nom": "DOLISIE" }, "geometry": { "type": "Point", "coordinates": [ 12.677285699589431, -4.19768333305313 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 10, "Id": 0, "Nom": "LOANGO" }, "geometry": { "type": "Point", "coordinates": [ 11.813151209938635, -4.657727095395213 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 11, "Id": 0, "Nom": "ODZIBA" }, "geometry": { "type": "Point", "coordinates": [ 15.515137353764109, -3.579781416966218 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 12, "Id": 0, "Nom": "GAMBOMA" }, "geometry": { "type": "Point", "coordinates": [ 15.876282819370807, -1.871318243289757 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 13, "Id": 0, "Nom": "MOSSAKA" }, "geometry": { "type": "Point", "coordinates": [ 16.793886447639935, -1.225374443991031 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 0, "Id": 0, "Nom": "BRAZZAVILLE" }, "geometry": { "type": "Point", "coordinates": [ 15.281520359360782, -4.260761228855928 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 0, "Id": 0, "Nom": "POINTE-NOIRE" }, "geometry": { "type": "Point", "coordinates": [ 11.881486521000056, -4.800392393999975 ] } }
+]
+}
