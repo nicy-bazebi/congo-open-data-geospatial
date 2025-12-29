@@ -1,1 +1,390 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portail Open Data Géospatial — République du Congo</title>
 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; }
+    header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e6e6e6;
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+    }
+    .brand { display:flex; flex-direction:column; gap:2px; }
+    .title { font-weight:700; font-size:16px; }
+    .subtitle { font-size:12px; color:#555; }
+    .wrap { display:grid; grid-template-columns: 380px 1fr; height: calc(100vh - 58px); }
+    aside { border-right: 1px solid #e6e6e6; padding: 12px; overflow:auto; }
+    #map { height: 100%; }
+
+    .card { border:1px solid #e6e6e6; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
+    .card h3 { margin: 0 0 10px 0; font-size: 14px; }
+    .label { display:block; font-size:12px; color:#444; margin-bottom:6px; }
+    input, select {
+      width:100%; padding:10px 10px; border:1px solid #dcdcdc; border-radius: 10px; outline:none;
+    }
+    .row { display:flex; gap:10px; }
+    .row > * { flex:1; }
+    .check { display:flex; gap:10px; align-items:center; padding:8px 10px; border:1px solid #efefef; border-radius: 10px; margin-bottom:8px; }
+    .muted { font-size:12px; color:#666; line-height:1.35; }
+    .pill { display:inline-block; padding:2px 8px; border:1px solid #ddd; border-radius: 999px; font-size:12px; }
+    .results { display:flex; flex-direction:column; gap:8px; }
+    .result { border:1px solid #efefef; border-radius: 10px; padding: 10px; cursor:pointer; }
+    .result:hover { background:#fafafa; }
+    .result .name { font-weight:700; font-size:13px; }
+    .result .meta { font-size:12px; color:#666; margin-top:4px; }
+    .btn {
+      display:inline-block; padding:10px 12px; border:1px solid #ddd; border-radius: 10px;
+      text-decoration:none; color:#111; background:#fff;
+    }
+    .btn:hover { background:#f7f7f7; }
+    .btn.full { width:100%; text-align:center; }
+    .links { display:flex; gap:10px; flex-wrap:wrap; }
+    .links a { font-size:12px; }
+    @media (max-width: 1050px){
+      .wrap { grid-template-columns: 1fr; grid-template-rows: 380px 1fr; }
+      aside { border-right: none; border-bottom: 1px solid #e6e6e6; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="brand">
+    <div class="title">Portail Open Data Géospatial — République du Congo</div>
+    <div class="subtitle">Découpage administratif & référentiels (visualisation + téléchargement)</div>
+  </div>
+  <div class="pill" id="status">Chargement…</div>
+</header>
+
+<div class="wrap">
+  <aside>
+    <div class="card">
+      <h3>Recherche</h3>
+      <label class="label">Nom (ou code)</label>
+      <input id="q" placeholder="Ex : Bouenza, Brazzaville, Ngabé, RN1..." />
+
+      <div class="row" style="margin-top:10px">
+        <div>
+          <label class="label">Niveau / couche</label>
+          <select id="level">
+            <option value="all">Toutes les couches visibles</option>
+            <option value="Limites_departements_congo">Limites départements</option>
+            <option value="Chef_lieu_departement">Chefs-lieux départements</option>
+            <option value="Chef_lieu_district">Chefs-lieux districts</option>
+            <option value="Reseau_routier_structurant">Réseau routier structurant</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">Champ “nom”</label>
+          <select id="nameField">
+            <option value="nom">nom</option>
+            <option value="NAME">NAME</option>
+            <option value="Nom">Nom</option>
+            <option value="NOM">NOM</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <a href="#" class="btn full" id="clear">Effacer</a>
+      </div>
+
+      <div class="muted" style="margin-top:10px">
+        Astuce : clique sur un résultat pour zoomer et afficher la fiche.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Couches</h3>
+
+      <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites départements</span></label>
+      <label class="check"><input type="checkbox" id="t_cld" checked> <span>Chefs-lieux départements</span></label>
+      <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux districts</span></label>
+      <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
+
+      <div class="muted">Tu peux masquer/afficher les couches selon le besoin.</div>
+    </div>
+
+    <div class="card">
+      <h3>Résultats <span class="pill" id="count">0</span></h3>
+      <div class="results" id="results"></div>
+    </div>
+
+    <div class="card" id="downloads">
+      <h3>Téléchargements</h3>
+
+      <div class="muted">Télécharge les données au format SIG (SHP ZIP) ou web (GeoJSON).</div>
+
+      <div style="margin-top:10px">
+        <div class="muted"><b>Limites départements</b></div>
+        <div class="links">
+          <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
+          <a class="btn" href="data/geojson/Limites_departements_congo/Limites_departements_congo.geojson">GeoJSON</a>
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <div class="muted"><b>Chefs-lieux départements</b></div>
+        <div class="links">
+          <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
+          <a class="btn" href="data/geojson/Chef_lieu_departement/Chef_lieu_departement.geojson">GeoJSON</a>
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <div class="muted"><b>Chefs-lieux districts</b></div>
+        <div class="links">
+          <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
+          <a class="btn" href="data/geojson/Chef_lieu_district/Chef_lieu_district.geojson">GeoJSON</a>
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <div class="muted"><b>Réseau routier structurant</b></div>
+        <div class="links">
+          <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
+          <a class="btn" href="data/geojson/Reseau_routier_structurant/Reseau_routier_structurant.geojson">GeoJSON</a>
+        </div>
+      </div>
+
+      <div class="muted" style="margin-top:10px">
+        Si les liens ZIP ne pointent pas vers tes fichiers, on ajustera juste les noms exacts.
+      </div>
+    </div>
+  </aside>
+
+  <section id="map"></section>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // -------------------------
+  // 0) Configuration chemins
+  // -------------------------
+  // IMPORTANT : adapte uniquement si tes noms de fichiers/dossiers diffèrent.
+  const DATASETS = [
+    {
+      key: "Limites_departements_congo",
+      label: "Limites départements",
+      geojson: "data/geojson/Limites_departements_congo/Limites_departements_congo.geojson",
+      toggleId: "t_dep",
+      defaultVisible: true
+    },
+    {
+      key: "Chef_lieu_departement",
+      label: "Chefs-lieux départements",
+      geojson: "data/geojson/Chef_lieu_departement/Chef_lieu_departement.geojson",
+      toggleId: "t_cld",
+      defaultVisible: true
+    },
+    {
+      key: "Chef_lieu_district",
+      label: "Chefs-lieux districts",
+      geojson: "data/geojson/Chef_lieu_district/Chef_lieu_district.geojson",
+      toggleId: "t_cldist",
+      defaultVisible: true
+    },
+    {
+      key: "Reseau_routier_structurant",
+      label: "Réseau routier structurant",
+      geojson: "data/geojson/Reseau_routier_structurant/Reseau_routier_structurant.geojson",
+      toggleId: "t_routes",
+      defaultVisible: false
+    }
+  ];
+
+  // -------------------------
+  // 1) Carte
+  // -------------------------
+  const map = L.map("map").setView([-1.0, 15.3], 6);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+
+  // -------------------------
+  // 2) UI
+  // -------------------------
+  const elStatus = document.getElementById("status");
+  const elQ = document.getElementById("q");
+  const elLevel = document.getElementById("level");
+  const elNameField = document.getElementById("nameField");
+  const elResults = document.getElementById("results");
+  const elCount = document.getElementById("count");
+  const elClear = document.getElementById("clear");
+
+  let layersByKey = {};
+  let allItems = []; // {datasetKey, datasetLabel, feature, layerRef}
+  let boundsAll = null;
+
+  function norm(s){
+    return (s ?? "").toString().trim().toLowerCase()
+      .normalize("NFD").replace(/\p{Diacritic}/gu,"");
+  }
+
+  function getName(props){
+    const f = elNameField.value;
+    return props?.[f] ?? props?.nom ?? props?.NAME ?? props?.Nom ?? props?.NOM ?? "Sans nom";
+  }
+
+  function getCode(props){
+    return props?.code ?? props?.CODE ?? props?.id ?? props?.ID ?? "-";
+  }
+
+  function popupHtml(datasetLabel, props){
+    const name = getName(props);
+    const code = getCode(props);
+    return `
+      <div style="font-family:Arial; min-width:220px">
+        <div style="font-weight:700; font-size:14px; margin-bottom:6px">${name}</div>
+        <div style="font-size:12px; color:#666; margin-bottom:6px">${datasetLabel}</div>
+        <div style="font-size:12px"><b>Code</b> : ${code}</div>
+      </div>
+    `;
+  }
+
+  function setCount(n){ elCount.textContent = String(n); }
+
+  function syncVisibility(){
+    for(const ds of DATASETS){
+      const cb = document.getElementById(ds.toggleId);
+      const layer = layersByKey[ds.key];
+      if(!layer || !cb) continue;
+      const on = cb.checked;
+      const has = map.hasLayer(layer);
+      if(on && !has) layer.addTo(map);
+      if(!on && has) map.removeLayer(layer);
+    }
+  }
+
+  function visibleKeys(){
+    const keys = new Set();
+    for(const ds of DATASETS){
+      const cb = document.getElementById(ds.toggleId);
+      if(cb?.checked) keys.add(ds.key);
+    }
+    return keys;
+  }
+
+  function renderResults(items){
+    elResults.innerHTML = "";
+    if(!items.length){
+      setCount(0);
+      elResults.innerHTML = `<div class="muted">Aucun résultat.</div>`;
+      return;
+    }
+    setCount(items.length);
+    for(const item of items.slice(0, 250)){
+      const props = item.feature.properties || {};
+      const div = document.createElement("div");
+      div.className = "result";
+      div.innerHTML = `
+        <div class="name">${getName(props)}</div>
+        <div class="meta">${item.datasetLabel} • Code: ${getCode(props)}</div>
+      `;
+      div.addEventListener("click", () => {
+        try{
+          const b = item.layerRef.getBounds?.();
+          if(b && b.isValid()) map.fitBounds(b, {padding:[20,20]});
+        }catch(e){}
+        item.layerRef.openPopup();
+      });
+      elResults.appendChild(div);
+    }
+  }
+
+  function applyFilters(){
+    const q = norm(elQ.value);
+    const lev = elLevel.value;
+    const vis = visibleKeys();
+
+    let matches = allItems.filter(it => {
+      if(!vis.has(it.datasetKey)) return false;
+      if(lev !== "all" && it.datasetKey !== lev) return false;
+      if(!q) return true;
+
+      const props = it.feature.properties || {};
+      const name = norm(getName(props));
+      const code = norm(getCode(props));
+      return name.includes(q) || code.includes(q);
+    });
+
+    matches.sort((a,b) => norm(getName(a.feature.properties)).localeCompare(norm(getName(b.feature.properties))));
+    renderResults(matches);
+  }
+
+  async function loadDataset(ds){
+    const res = await fetch(ds.geojson);
+    if(!res.ok) throw new Error(`Non chargé: ${ds.geojson}`);
+    const gj = await res.json();
+
+    const layer = L.geoJSON(gj, {
+      onEachFeature: (feature, l) => {
+        l.bindPopup(popupHtml(ds.label, feature.properties || {}));
+        allItems.push({datasetKey: ds.key, datasetLabel: ds.label, feature, layerRef: l});
+      }
+    });
+
+    layersByKey[ds.key] = layer;
+
+    const b = layer.getBounds();
+    if(b.isValid()) boundsAll = boundsAll ? boundsAll.extend(b) : b;
+
+    return layer;
+  }
+
+  (async function init(){
+    elStatus.textContent = "Chargement…";
+
+    let ok = 0, fail = 0;
+
+    for(const ds of DATASETS){
+      try{
+        await loadDataset(ds);
+        ok++;
+      }catch(e){
+        console.error(e);
+        fail++;
+      }
+    }
+
+    // Visibilité initiale
+    for(const ds of DATASETS){
+      const cb = document.getElementById(ds.toggleId);
+      if(cb) cb.checked = ds.defaultVisible;
+    }
+    syncVisibility();
+
+    // Zoom global si possible
+    if(boundsAll?.isValid()) map.fitBounds(boundsAll, {padding:[20,20]});
+
+    // Events
+    elQ.addEventListener("input", applyFilters);
+    elLevel.addEventListener("change", applyFilters);
+    elNameField.addEventListener("change", applyFilters);
+
+    for(const ds of DATASETS){
+      document.getElementById(ds.toggleId)?.addEventListener("change", () => {
+        syncVisibility();
+        applyFilters();
+      });
+    }
+    elClear.addEventListener("click", (e) => {
+      e.preventDefault();
+      elQ.value = "";
+      elLevel.value = "all";
+      applyFilters();
+    });
+
+    applyFilters();
+
+    elStatus.textContent = fail ? `OK ${ok} • ⚠️ ${fail} manquant(s)` : `OK ${ok} couche(s)`;
+  })();
+</script>
+</body>
+</html>
