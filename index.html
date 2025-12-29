@@ -291,6 +291,22 @@
 
     .leaflet-popup-content-wrapper{ border-radius: 14px; }
 
+    /* Labels permanents pour les points */
+    .lbl{
+      background: rgba(11,18,32,.88);
+      color: #eef5ff;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      padding: 4px 8px;
+      font-weight: 800;
+      font-size: 11px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.25);
+      white-space: nowrap;
+    }
+    .leaflet-tooltip.lbl::before{
+      border-top-color: rgba(11,18,32,.88);
+    }
+
     @media (max-width: 1100px){
       .wrap{ grid-template-columns: 1fr; height: auto; }
       .mapwrap{ height: 70vh; }
@@ -308,7 +324,7 @@
       <div class="brandText">
         <div class="institution">Institut Géographique National</div>
         <div class="title">Portail Organisation Administrative — République du Congo</div>
-        <div class="subtitle">Visualisation & téléchargement : limites administratives, localités (chefs-lieux) et réseau routier structurant</div>
+        <div class="subtitle">Visualisation & téléchargement : limites administratives, chefs-lieux et réseau routier structurant</div>
       </div>
     </div>
 
@@ -331,7 +347,7 @@
           <option value="Chef_lieu_district">Chefs-lieux districts</option>
           <option value="Reseau_routier_structurant">Réseau routier structurant</option>
         </select>
-        <div class="hint">Astuce : pour filtrer réellement, utilise les cases à cocher ci-dessous.</div>
+        <div class="hint">Astuce : pour afficher/masquer, utilise aussi les cases à cocher.</div>
       </div>
 
       <!-- Couches -->
@@ -346,7 +362,7 @@
       <!-- Téléchargements -->
       <div class="card" id="downloads">
         <div class="cardTitle">Téléchargements</div>
-        <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web.</div>
+        <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web • Metadata (txt).</div>
 
         <div class="dl">
           <div class="dlItem">
@@ -354,6 +370,7 @@
             <div class="dlLinks">
               <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
               <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
+              <a class="btn" href="metadata/Limites_departements_congo/metadata.txt">Metadata</a>
             </div>
           </div>
 
@@ -362,6 +379,7 @@
             <div class="dlLinks">
               <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
               <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
+              <a class="btn" href="metadata/Chef_lieu_departement/metadata.txt">Metadata</a>
             </div>
           </div>
 
@@ -370,6 +388,7 @@
             <div class="dlLinks">
               <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
               <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
+              <a class="btn" href="metadata/Chef_lieu_district/metadata.txt">Metadata</a>
             </div>
           </div>
 
@@ -378,12 +397,13 @@
             <div class="dlLinks">
               <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
               <a class="btn" href="data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson">GeoJSON</a>
+              <a class="btn" href="metadata/Reseau_routier_structurant/metadata.txt">Metadata</a>
             </div>
           </div>
         </div>
 
         <div class="hint">
-          Si un ZIP ne marche pas : vérifie que le fichier existe avec exactement le même nom (majuscules/minuscules comprises).
+          Si un lien ne marche pas : vérifie que le fichier existe avec exactement le même nom (majuscules/minuscules comprises).
         </div>
       </div>
     </aside>
@@ -460,19 +480,85 @@
       }
     }
 
-    function styleByKey(key){
-      if(key === "Limites_departements_congo"){
-        return { color: "#16a34a", weight: 2, fillOpacity: 0.05 };
-      }
-      if(key === "Reseau_routier_structurant"){
-        return { color: "#ef4444", weight: 2, opacity: 0.9 };
-      }
-      return { color: "#f59e0b", weight: 2, opacity: 0.9, fillOpacity: 0.9 };
+    // ---- Nom des points : champ EXACT = "Nom"
+    function getPointName(props){
+      const v = props?.Nom;
+      const s = (v ?? "").toString().trim();
+      return s ? s : "Sans nom";
     }
 
-    function markerByKey(key){
-      // points (chefs-lieux)
-      return { radius: 6, color: "#0b1220", weight: 1, fillColor: "#f59e0b", fillOpacity: 0.95 };
+    // ---- Nom du département : on essaie plusieurs champs + fallback
+    function getDepartementName(props){
+      const candidates = ["Departement","DEPARTEMENT","département","Departemen","DEPARTEMEN","NOM","Nom","nom","NAME","Name"];
+      for(const k of candidates){
+        const v = props?.[k];
+        const s = (v ?? "").toString().trim();
+        if(s) return s;
+      }
+      // fallback "premier texte plausible"
+      for(const [k,v] of Object.entries(props || {})){
+        const s = (v ?? "").toString().trim();
+        if(!s) continue;
+        if(/^\d+(\.\d+)?$/.test(s)) continue;
+        if(s.length <= 80) return s;
+      }
+      return "Sans nom";
+    }
+
+    function styleByKey(key){
+      if(key === "Limites_departements_congo"){
+        return { color: "#000000", weight: 2, fillOpacity: 0.03 }; // NOIR uniforme
+      }
+      if(key === "Reseau_routier_structurant"){
+        return { color: "#ef4444", weight: 2, opacity: 0.9 }; // routes rouge
+      }
+      return { color: "#f59e0b", weight: 2, opacity: 0.9 };
+    }
+
+    // Icône "pin" rouge
+    const redPinIcon = L.divIcon({
+      className: "",
+      iconSize: [18, 18],
+      iconAnchor: [9, 18],
+      html: `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13z" fill="#ef4444"/>
+          <circle cx="12" cy="9" r="2.6" fill="#0b1220"/>
+        </svg>
+      `
+    });
+
+    function pointToLayerByKey(dsKey, feature, latlng){
+      if(dsKey === "Chef_lieu_departement" || dsKey === "Chef_lieu_district"){
+        return L.marker(latlng, { icon: redPinIcon });
+      }
+      return L.circleMarker(latlng, { radius: 6, color: "#0b1220", weight: 1, fillColor: "#f59e0b", fillOpacity: 0.95 });
+    }
+
+    function fmtNum(x){
+      if(x === null || x === undefined || x === "") return "-";
+      const n = Number(String(x).replace(",", "."));
+      if(Number.isNaN(n)) return String(x);
+      return n.toLocaleString("fr-FR");
+    }
+
+    function popupDepartement(props){
+      const dep = getDepartementName(props);
+      // champs attendus (d'après ta table)
+      const superficie = props?.Superficie ?? props?.SUPERFICIE ?? props?.sup ?? props?.area;
+      const densite = props?.Densite ?? props?.DENSITE ?? props?.dens ?? props?.density;
+      const population = props?.Population ?? props?.POPULATION ?? props?.pop;
+
+      return `
+        <div style="font-family:Arial; min-width:250px">
+          <div style="font-weight:900; font-size:14px; margin-bottom:8px">${dep}</div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px">
+            <tr><td style="padding:4px 0; color:#666">Superficie</td><td style="padding:4px 0; text-align:right"><b>${fmtNum(superficie)}</b></td></tr>
+            <tr><td style="padding:4px 0; color:#666">Population</td><td style="padding:4px 0; text-align:right"><b>${fmtNum(population)}</b></td></tr>
+            <tr><td style="padding:4px 0; color:#666">Densité</td><td style="padding:4px 0; text-align:right"><b>${fmtNum(densite)}</b></td></tr>
+          </table>
+        </div>
+      `;
     }
 
     async function loadDataset(ds){
@@ -482,11 +568,32 @@
 
       const layer = L.geoJSON(gj, {
         style: () => styleByKey(ds.key),
-        pointToLayer: (feature, latlng) => L.circleMarker(latlng, markerByKey(ds.key)),
+        pointToLayer: (feature, latlng) => pointToLayerByKey(ds.key, feature, latlng),
         onEachFeature: (feature, l) => {
           const props = feature.properties || {};
-          const name = props.nom ?? props.NOM ?? props.NAME ?? props.Nom ?? "Sans nom";
-          l.bindPopup(`<b>${name}</b><br><span style="font-size:12px;color:#666">${ds.label}</span>`);
+
+          // POPUP
+          if(ds.key === "Limites_departements_congo"){
+            l.bindPopup(popupDepartement(props));
+          } else if(ds.key === "Chef_lieu_departement" || ds.key === "Chef_lieu_district"){
+            const name = getPointName(props);
+            l.bindPopup(`<b>${name}</b><br><span style="font-size:12px;color:#666">${ds.label}</span>`);
+          } else {
+            const name = getDepartementName(props);
+            l.bindPopup(`<b>${name}</b><br><span style="font-size:12px;color:#666">${ds.label}</span>`);
+          }
+
+          // LABELS PERMANENTS OBLIGATOIRES POUR TOUS LES POINTS CHEFS-LIEUX
+          if(ds.key === "Chef_lieu_departement" || ds.key === "Chef_lieu_district"){
+            const name = getPointName(props);
+            l.bindTooltip(name, {
+              permanent: true,
+              direction: "top",
+              offset: [0, -10],
+              opacity: 0.95,
+              className: "lbl"
+            });
+          }
         }
       });
 
@@ -514,8 +621,6 @@
     function applyLevelSelection(){
       const v = elLevel.value;
       if(v === "all") return;
-
-      // Active uniquement la couche choisie (si elle existe)
       for(const ds of DATASETS){
         const cb = document.getElementById(ds.toggleId);
         if(!cb) continue;
@@ -538,7 +643,6 @@
         }
       }
 
-      // état initial
       for(const ds of DATASETS){
         const cb = document.getElementById(ds.toggleId);
         if(cb) cb.checked = ds.defaultVisible;
@@ -547,7 +651,6 @@
 
       if(boundsAll?.isValid()) map.fitBounds(boundsAll, {padding:[20,20]});
 
-      // events
       for(const ds of DATASETS){
         document.getElementById(ds.toggleId)?.addEventListener("change", syncVisibility);
       }
