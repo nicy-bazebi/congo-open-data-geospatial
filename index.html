@@ -17,6 +17,8 @@
       --red:#ef4444;
       --radius:16px;
       --shadow:0 12px 30px rgba(0,0,0,.35);
+      --bgA: rgba(11,18,32,.88);
+      --panelBg: rgba(255,255,255,.03);
     }
 
     *{ box-sizing:border-box; }
@@ -29,6 +31,7 @@
                   radial-gradient(900px 700px at 40% 90%, rgba(239,68,68,.18), transparent 55%),
                   linear-gradient(120deg, #071023, #0b1220);
       color:var(--text);
+      overflow: hidden;
     }
 
     header{
@@ -41,7 +44,7 @@
       gap:12px;
       padding: 12px 16px;
       border-bottom:1px solid var(--line);
-      background: rgba(11,18,32,.88);
+      background: var(--bgA);
       backdrop-filter: blur(10px);
     }
 
@@ -127,18 +130,20 @@
     .dot.ok{ background: var(--green); box-shadow: 0 0 0 4px rgba(22,163,74,.18); }
     .dot.bad{ background: var(--red); box-shadow: 0 0 0 4px rgba(239,68,68,.18); }
 
+    /* Desktop layout */
     .wrap{
       display:grid;
       grid-template-columns: 420px 1fr;
       gap: 14px;
       padding: 14px;
       height: calc(100vh - 78px);
+      min-height: 0;
     }
 
     aside{
       border:1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.03);
+      background: var(--panelBg);
       box-shadow: var(--shadow);
       padding: 12px;
       overflow:auto;
@@ -148,7 +153,7 @@
     .mapwrap{
       border:1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.03);
+      background: var(--panelBg);
       box-shadow: var(--shadow);
       overflow:hidden;
       display:flex;
@@ -307,10 +312,127 @@
       border-top-color: rgba(11,18,32,.88);
     }
 
-    @media (max-width: 1100px){
-      .wrap{ grid-template-columns: 1fr; height: auto; }
-      .mapwrap{ height: 70vh; }
-      .title,.subtitle{ white-space: normal; }
+    /* ===== Mobile: map first + collapsible panel ===== */
+    .mobileMenuBtn{
+      display:none;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+      user-select:none;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      font-weight: 800;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .hamb{
+      width: 14px;
+      height: 10px;
+      display:inline-block;
+      position: relative;
+    }
+    .hamb span{
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: rgba(238,245,255,.85);
+      border-radius: 2px;
+    }
+    .hamb span:nth-child(1){ top:0; }
+    .hamb span:nth-child(2){ top:4px; opacity:.85; }
+    .hamb span:nth-child(3){ top:8px; opacity:.7; }
+
+    .overlay{
+      display:none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 1400;
+    }
+
+    .panelMobile{
+      position: fixed;
+      top: 78px;
+      right: 0;
+      bottom: 0;
+      width: min(420px, 92vw);
+      background: rgba(11,18,32,.95);
+      border-left: 1px solid var(--line);
+      z-index: 1500;
+      transform: translateX(105%);
+      transition: transform .25s ease;
+      box-shadow: -20px 0 40px rgba(0,0,0,.4);
+      padding: 12px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      border-top: 1px solid var(--line);
+    }
+    .panelMobile.open{ transform: translateX(0); }
+
+    .panelTopRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panelTitle{
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: .2px;
+    }
+    .closeBtn{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 12px;
+    }
+    .closeBtn:hover{ background: rgba(255,255,255,.10); }
+
+    @media (max-width: 900px){
+      body{ overflow: hidden; }
+
+      .wrap{
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding: 0;
+        height: calc(100vh - 78px);
+      }
+
+      aside{ display:none; }
+      .mapwrap{
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .maphead{
+        border-left:none;
+        border-right:none;
+        border-top:none;
+        border-radius:0;
+      }
+
+      .mobileMenuBtn{ display:inline-flex; }
+      .overlay.show{ display:block; }
+    }
+
+    @media (max-width: 520px){
+      header{ padding: 10px 12px; }
+      .logoWrap{ width:44px; height:44px; border-radius: 12px; }
+      .logoWrap img{ max-width: 36px; max-height: 36px; }
+      .title{ font-size: 14px; white-space: normal; }
+      .subtitle{ display:none; }
+      .panelMobile{ top: 68px; }
     }
   </style>
 </head>
@@ -328,15 +450,22 @@
       </div>
     </div>
 
-    <div class="statusPill" id="statusPill">
-      <span class="dot" id="statusDot"></span>
-      <span id="statusText">Chargement…</span>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="mobileMenuBtn" id="openPanelBtn" type="button" aria-label="Ouvrir le menu">
+        <span class="hamb" aria-hidden="true"><span></span><span></span><span></span></span>
+        Menu
+      </button>
+
+      <div class="statusPill" id="statusPill">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Chargement…</span>
+      </div>
     </div>
   </header>
 
   <div class="wrap">
-    <aside>
-      <!-- Filtrer sur -->
+    <!-- Desktop aside -->
+    <aside id="desktopAside">
       <div class="card">
         <div class="cardTitle">Filtrer sur</div>
         <label class="label">Jeu de données affiché</label>
@@ -350,7 +479,6 @@
         <div class="hint">Astuce : pour afficher/masquer, utilise aussi les cases à cocher.</div>
       </div>
 
-      <!-- Couches -->
       <div class="card">
         <div class="cardTitle">Couches</div>
         <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites des départements</span></label>
@@ -359,7 +487,6 @@
         <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
       </div>
 
-      <!-- Téléchargements -->
       <div class="card" id="downloads">
         <div class="cardTitle">Téléchargements</div>
         <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web • Metadata (txt).</div>
@@ -408,6 +535,7 @@
       </div>
     </aside>
 
+    <!-- Map -->
     <section class="mapwrap">
       <div class="maphead">
         <div class="badgeRow">
@@ -419,6 +547,82 @@
       <div id="map"></div>
     </section>
   </div>
+
+  <!-- Mobile overlay + slide panel -->
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="panelMobile" id="panelMobile" aria-hidden="true">
+    <div class="panelTopRow">
+      <div class="panelTitle">Menu</div>
+      <button class="closeBtn" id="closePanelBtn" type="button" aria-label="Fermer le menu">Fermer</button>
+    </div>
+
+    <div class="card">
+      <div class="cardTitle">Filtrer sur</div>
+      <label class="label">Jeu de données affiché</label>
+      <select id="level_m">
+        <option value="all">Toutes les couches visibles</option>
+        <option value="Limites_departements_congo">Limites des départements</option>
+        <option value="Chef_lieu_district">Chefs-lieux de districts</option>
+        <option value="Chef_lieu_departement">Chefs-lieux de départements</option>
+        <option value="Reseau_routier_structurant">Réseau routier structurant</option>
+      </select>
+      <div class="hint">Astuce : tu peux aussi activer/désactiver les couches ci-dessous.</div>
+    </div>
+
+    <div class="card">
+      <div class="cardTitle">Couches</div>
+      <label class="check"><input type="checkbox" id="t_dep_m" checked> <span>Limites des départements</span></label>
+      <label class="check"><input type="checkbox" id="t_cldist_m" checked> <span>Chefs-lieux de districts</span></label>
+      <label class="check"><input type="checkbox" id="t_cld_m" checked> <span>Chefs-lieux de départements</span></label>
+      <label class="check"><input type="checkbox" id="t_routes_m"> <span>Réseau routier structurant</span></label>
+    </div>
+
+    <div class="card">
+      <div class="cardTitle">Téléchargements</div>
+      <div class="hint">SHP (ZIP) • GeoJSON • Metadata.</div>
+
+      <div class="dl">
+        <div class="dlItem">
+          <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites des départements</div>
+          <div class="dlLinks">
+            <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
+            <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
+            <a class="btn" href="metadata/Limites_departements_congo/metadata.txt">Metadata</a>
+          </div>
+        </div>
+
+        <div class="dlItem">
+          <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de départements</div>
+          <div class="dlLinks">
+            <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
+            <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
+            <a class="btn" href="metadata/Chef_lieu_departement/metadata.txt">Metadata</a>
+          </div>
+        </div>
+
+        <div class="dlItem">
+          <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de districts</div>
+          <div class="dlLinks">
+            <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
+            <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
+            <a class="btn" href="metadata/Chef_lieu_district/metadata.txt">Metadata</a>
+          </div>
+        </div>
+
+        <div class="dlItem">
+          <div class="dlTitle"><span class="tag routes">ROUTES</span> Réseau routier structurant</div>
+          <div class="dlLinks">
+            <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
+            <a class="btn" href="data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson">GeoJSON</a>
+            <a class="btn" href="metadata/Reseau_routier_structurant/metadata.txt">Metadata</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint">Sur mobile, le menu est repliable pour laisser la carte en plein écran.</div>
+    </div>
+  </aside>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
@@ -453,7 +657,7 @@
       }
     ];
 
-    const map = L.map("map").setView([-1.0, 15.3], 6);
+    const map = L.map("map", { zoomControl: true }).setView([-1.0, 15.3], 6);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -462,7 +666,14 @@
 
     const elStatusText = document.getElementById("statusText");
     const elStatusDot = document.getElementById("statusDot");
-    const elLevel = document.getElementById("level");
+
+    const elLevelDesktop = document.getElementById("level");
+    const elLevelMobile = document.getElementById("level_m");
+
+    const panelMobile = document.getElementById("panelMobile");
+    const overlay = document.getElementById("overlay");
+    const openPanelBtn = document.getElementById("openPanelBtn");
+    const closePanelBtn = document.getElementById("closePanelBtn");
 
     let layersByKey = {};
     let boundsAll = null;
@@ -506,15 +717,14 @@
 
     function styleByKey(key){
       if(key === "Limites_departements_congo"){
-        return { color: "#000000", weight: 2, fillOpacity: 0.03 }; // NOIR uniforme
+        return { color: "#000000", weight: 2, fillOpacity: 0.03 };
       }
       if(key === "Reseau_routier_structurant"){
-        return { color: "#ef4444", weight: 2, opacity: 0.9 }; // routes rouge
+        return { color: "#ef4444", weight: 2, opacity: 0.9 };
       }
       return { color: "#f59e0b", weight: 2, opacity: 0.9 };
     }
 
-    // Icône "pin" rouge pour points (départements + districts)
     const redPinIcon = L.divIcon({
       className: "",
       iconSize: [18, 18],
@@ -543,17 +753,28 @@
 
     function popupDepartement(props){
       const dep = getDepartementName(props);
-      const superficie = props?.Superficie ?? props?.SUPERFICIE ?? props?.sup ?? props?.area;
-      const densite = props?.Densite ?? props?.DENSITE ?? props?.dens ?? props?.density;
-      const population = props?.Population ?? props?.POPULATION ?? props?.pop;
+
+      // Champs (avec accents pris en charge)
+      const superficie = props?.["Superficie"] ?? props?.Superficie ?? props?.SUPERFICIE ?? props?.sup ?? props?.area;
+      const densite = props?.["Densité"] ?? props?.Densite ?? props?.DENSITE ?? props?.densite ?? props?.dens ?? props?.density;
+      const population = props?.["Population"] ?? props?.Population ?? props?.POPULATION ?? props?.pop ?? props?.Pop;
 
       return `
-        <div style="font-family:Arial; min-width:250px">
+        <div style="font-family:Arial; min-width:260px">
           <div style="font-weight:900; font-size:14px; margin-bottom:8px">${dep}</div>
           <table style="width:100%; border-collapse:collapse; font-size:12px">
-            <tr><td style="padding:4px 0; color:#666">Superficie</td><td style="padding:4px 0; text-align:right"><b>${fmtNum(superficie)}</b></td></tr>
-            <tr><td style="padding:4px 0; color:#666">Population</td><td style="padding:4px 0; text-align:right"><b>${fmtNum(population)}</b></td></tr>
-            <tr><td style="padding:4px 0; color:#666">Densité</td><td style="padding:4px 0; text-align:right"><b>${fmtNum(densite)}</b></td></tr>
+            <tr>
+              <td style="padding:4px 0; color:#666">Superficie (km2)</td>
+              <td style="padding:4px 0; text-align:right"><b>${fmtNum(superficie)}</b></td>
+            </tr>
+            <tr>
+              <td style="padding:4px 0; color:#666">Population (RGPH-5, 2023)</td>
+              <td style="padding:4px 0; text-align:right"><b>${fmtNum(population)}</b></td>
+            </tr>
+            <tr>
+              <td style="padding:4px 0; color:#666">Densité de population (hab/km2)</td>
+              <td style="padding:4px 0; text-align:right"><b>${fmtNum(densite)}</b></td>
+            </tr>
           </table>
         </div>
       `;
@@ -570,7 +791,6 @@
         onEachFeature: (feature, l) => {
           const props = feature.properties || {};
 
-          // POPUP
           if(ds.key === "Limites_departements_congo"){
             l.bindPopup(popupDepartement(props));
           } else if(ds.key === "Chef_lieu_departement" || ds.key === "Chef_lieu_district"){
@@ -603,10 +823,24 @@
       return layer;
     }
 
+    const toggleMap = [
+      { dsKey: "Limites_departements_congo", d: "t_dep",    m: "t_dep_m" },
+      { dsKey: "Chef_lieu_district",        d: "t_cldist", m: "t_cldist_m" },
+      { dsKey: "Chef_lieu_departement",     d: "t_cld",    m: "t_cld_m" },
+      { dsKey: "Reseau_routier_structurant",d: "t_routes", m: "t_routes_m" }
+    ];
+
+    function setToggleBoth(idDesktop, idMobile, value){
+      const a = document.getElementById(idDesktop);
+      const b = document.getElementById(idMobile);
+      if(a) a.checked = value;
+      if(b) b.checked = value;
+    }
+
     function syncVisibility(){
-      for(const ds of DATASETS){
-        const cb = document.getElementById(ds.toggleId);
-        const layer = layersByKey[ds.key];
+      for(const t of toggleMap){
+        const cb = document.getElementById(t.d);
+        const layer = layersByKey[t.dsKey];
         if(!layer || !cb) continue;
 
         const on = cb.checked;
@@ -616,16 +850,57 @@
       }
     }
 
-    function applyLevelSelection(){
-      const v = elLevel.value;
-      if(v === "all") return;
-      for(const ds of DATASETS){
-        const cb = document.getElementById(ds.toggleId);
-        if(!cb) continue;
-        cb.checked = (ds.key === v);
+    function applyLevelSelection(value){
+      if(value === "all") return;
+
+      for(const t of toggleMap){
+        const shouldOn = (t.dsKey === value);
+        setToggleBoth(t.d, t.m, shouldOn);
       }
       syncVisibility();
     }
+
+    function bindToggleSync(){
+      for(const t of toggleMap){
+        const d = document.getElementById(t.d);
+        const m = document.getElementById(t.m);
+
+        if(d){
+          d.addEventListener("change", () => {
+            setToggleBoth(t.d, t.m, d.checked);
+            syncVisibility();
+          });
+        }
+        if(m){
+          m.addEventListener("change", () => {
+            setToggleBoth(t.d, t.m, m.checked);
+            syncVisibility();
+          });
+        }
+      }
+    }
+
+    function openPanel(){
+      panelMobile.classList.add("open");
+      overlay.classList.add("show");
+      panelMobile.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+      setTimeout(() => map.invalidateSize(), 220);
+    }
+    function closePanel(){
+      panelMobile.classList.remove("open");
+      overlay.classList.remove("show");
+      panelMobile.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "hidden";
+      setTimeout(() => map.invalidateSize(), 220);
+    }
+
+    openPanelBtn.addEventListener("click", openPanel);
+    closePanelBtn.addEventListener("click", closePanel);
+    overlay.addEventListener("click", closePanel);
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closePanel();
+    });
 
     (async function init(){
       setStatus(0, DATASETS.length);
@@ -642,19 +917,34 @@
       }
 
       for(const ds of DATASETS){
-        const cb = document.getElementById(ds.toggleId);
-        if(cb) cb.checked = ds.defaultVisible;
+        const isOn = !!ds.defaultVisible;
+        const t = toggleMap.find(x => x.dsKey === ds.key);
+        if(t) setToggleBoth(t.d, t.m, isOn);
       }
       syncVisibility();
 
       if(boundsAll?.isValid()) map.fitBounds(boundsAll, {padding:[20,20]});
 
-      for(const ds of DATASETS){
-        document.getElementById(ds.toggleId)?.addEventListener("change", syncVisibility);
+      bindToggleSync();
+
+      function syncSelects(from, to){
+        if(!from || !to) return;
+        to.value = from.value;
       }
-      elLevel.addEventListener("change", applyLevelSelection);
+
+      elLevelDesktop.addEventListener("change", () => {
+        syncSelects(elLevelDesktop, elLevelMobile);
+        applyLevelSelection(elLevelDesktop.value);
+      });
+      elLevelMobile.addEventListener("change", () => {
+        syncSelects(elLevelMobile, elLevelDesktop);
+        applyLevelSelection(elLevelMobile.value);
+      });
 
       setStatus(ok, fail);
+
+      window.addEventListener("resize", () => map.invalidateSize());
+      window.addEventListener("orientationchange", () => setTimeout(() => map.invalidateSize(), 250));
     })();
   </script>
 </body>
