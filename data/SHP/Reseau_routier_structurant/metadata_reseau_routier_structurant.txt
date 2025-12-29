@@ -1,0 +1,12 @@
+Description 
+Ce thème présente le réseau structurant à l'échelle de la République du Congo notamment les routes nationales et départementales. Il désigne l’ensemble des routes ou axes majeurs assurant la liaison entre départements, centres urbains et zones de production, jugées prioritaires pour le désenclavement, le développement économique, l’intégration nationale et l’accessibilité.
+
+Source : Numérisation cartographique sur fond de la carte topographique du Congo au 1 : 200 000 (Geoconsult, 2015) : Institut Géographique National (IGN)
+
+Échelle : 1 : 200 000
+
+Contact : Direction scientifique – Institut Géographique National (IGN)
+
+Système de référence : WGS84 / EPSG : 4326
+
+Licence d’utilisation (ex. CC-BY 4.0)
