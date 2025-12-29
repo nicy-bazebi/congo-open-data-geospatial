@@ -25,11 +25,8 @@
     html, body { height: 100%; }
     body{
       margin:0;
-      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
-      background: radial-gradient(1200px 800px at 20% 0%, rgba(22,163,74,.25), transparent 55%),
-                  radial-gradient(900px 700px at 80% 10%, rgba(245,158,11,.22), transparent 55%),
-                  radial-gradient(900px 700px at 40% 90%, rgba(239,68,68,.18), transparent 55%),
-                  linear-gradient(120deg, #071023, #0b1220);
+      font-family: Arial, system-ui, sans-serif;
+      background: linear-gradient(120deg, #071023, #0b1220);
       color:var(--text);
       overflow: hidden;
     }
@@ -41,911 +38,139 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:12px;
       padding: 12px 16px;
       border-bottom:1px solid var(--line);
       background: var(--bgA);
-      backdrop-filter: blur(10px);
     }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width: 0;
-    }
-
+    .brand{ display:flex; gap:12px; align-items:center; }
     .logoWrap{
-      width:52px;
-      height:52px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      flex: 0 0 auto;
+      width:48px; height:48px;
+      border-radius:12px;
+      background:rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:center;
     }
+    .logoWrap img{ max-width:36px; max-height:36px; }
 
-    .logoWrap img{
-      max-height: 44px;
-      max-width: 44px;
-      width:auto;
-      height:auto;
-      display:block;
-    }
+    .title{ font-weight:800; font-size:15px; }
+    .institution{ font-size:12px; opacity:.8; }
 
-    .brandText{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      min-width: 0;
-    }
-
-    .institution{
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-      color: rgba(238,245,255,.88);
-    }
-
-    .title{
-      font-size: 15px;
-      font-weight: 800;
-      line-height: 1.15;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .subtitle{
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .statusPill{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .dot{
-      width:9px; height:9px; border-radius:999px;
-      background: var(--yellow);
-      box-shadow: 0 0 0 4px rgba(245,158,11,.15);
-    }
-    .dot.ok{ background: var(--green); box-shadow: 0 0 0 4px rgba(22,163,74,.18); }
-    .dot.bad{ background: var(--red); box-shadow: 0 0 0 4px rgba(239,68,68,.18); }
-
-    /* Desktop layout */
     .wrap{
       display:grid;
-      grid-template-columns: 420px 1fr;
-      gap: 14px;
-      padding: 14px;
-      height: calc(100vh - 78px);
-      min-height: 0;
+      grid-template-columns:420px 1fr;
+      height:calc(100vh - 72px);
     }
 
     aside{
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panelBg);
-      box-shadow: var(--shadow);
-      padding: 12px;
+      padding:12px;
       overflow:auto;
-      min-height: 0;
+      background:var(--panelBg);
+      border-right:1px solid var(--line);
     }
 
-    .mapwrap{
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panelBg);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      min-height: 0;
-    }
-
-    .maphead{
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(0,0,0,.16);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .badgeRow{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap: wrap;
-    }
-
-    .miniBadge{
-      font-size: 11px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.05);
-      color: rgba(238,245,255,.9);
-    }
-
-    #map{ flex:1; min-height: 0; }
+    .mapwrap{ display:flex; flex-direction:column; }
+    #map{ flex:1; }
 
     .card{
       border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(0,0,0,.14);
-      padding: 12px;
-      margin-bottom: 12px;
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      background:rgba(0,0,0,.15);
     }
 
-    .cardTitle{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      font-size: 13px;
-    }
+    .cardTitle{ font-weight:800; margin-bottom:8px; }
 
-    .label{
-      display:block;
-      font-size: 12px;
-      color: rgba(238,245,255,.82);
-      margin-bottom: 6px;
-    }
-
-    select{
-      width:100%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
-      outline:none;
-    }
-
-    .check{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      margin-bottom: 8px;
-    }
+    .check{ display:flex; gap:8px; margin-bottom:6px; }
 
     .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 10px 12px;
-      border-radius: 12px;
+      padding:8px 10px;
       border:1px solid var(--line);
+      border-radius:10px;
+      color:var(--text);
       text-decoration:none;
-      color: var(--text);
-      background: rgba(255,255,255,.06);
-      cursor:pointer;
-      user-select:none;
-    }
-    .btn:hover{ background: rgba(255,255,255,.10); }
-
-    .hint{
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.4;
-      margin-top: 8px;
+      background:rgba(255,255,255,.05);
     }
 
-    .dl{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top: 8px;
-    }
-    .dlItem{
-      border:1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px 12px;
-      background: rgba(0,0,0,.18);
-    }
-    .dlTitle{
-      font-weight:800;
-      font-size:13px;
-      margin-bottom:6px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .dlLinks{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .tag{
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.05);
-      color: rgba(238,245,255,.9);
-    }
-    .tag.admin{ border-color: rgba(22,163,74,.35); }
-    .tag.points{ border-color: rgba(245,158,11,.35); }
-    .tag.routes{ border-color: rgba(239,68,68,.35); }
-
-    .leaflet-popup-content-wrapper{ border-radius: 14px; }
-
-    /* Labels permanents (uniquement chefs-lieux de départements) */
     .lbl{
-      background: rgba(11,18,32,.88);
-      color: #eef5ff;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 10px;
-      padding: 4px 8px;
-      font-weight: 800;
-      font-size: 11px;
-      box-shadow: 0 8px 18px rgba(0,0,0,.25);
-      white-space: nowrap;
-    }
-    .leaflet-tooltip.lbl::before{
-      border-top-color: rgba(11,18,32,.88);
+      background:rgba(11,18,32,.9);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:8px;
+      padding:4px 6px;
+      font-size:11px;
+      font-weight:800;
+      color:#fff;
     }
 
-    /* ===== Mobile: map first + collapsible panel ===== */
-    .mobileMenuBtn{
-      display:none;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      cursor:pointer;
-      user-select:none;
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      font-weight: 800;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .hamb{
-      width: 14px;
-      height: 10px;
-      display:inline-block;
-      position: relative;
-    }
-    .hamb span{
-      position:absolute;
-      left:0; right:0;
-      height:2px;
-      background: rgba(238,245,255,.85);
-      border-radius: 2px;
-    }
-    .hamb span:nth-child(1){ top:0; }
-    .hamb span:nth-child(2){ top:4px; opacity:.85; }
-    .hamb span:nth-child(3){ top:8px; opacity:.7; }
-
-    .overlay{
-      display:none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      z-index: 1400;
-    }
-
-    .panelMobile{
-      position: fixed;
-      top: 78px;
-      right: 0;
-      bottom: 0;
-      width: min(420px, 92vw);
-      background: rgba(11,18,32,.95);
-      border-left: 1px solid var(--line);
-      z-index: 1500;
-      transform: translateX(105%);
-      transition: transform .25s ease;
-      box-shadow: -20px 0 40px rgba(0,0,0,.4);
-      padding: 12px;
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-      border-top: 1px solid var(--line);
-    }
-    .panelMobile.open{ transform: translateX(0); }
-
-    .panelTopRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--line);
-    }
-    .panelTitle{
-      font-weight: 900;
-      font-size: 13px;
-      letter-spacing: .2px;
-    }
-    .closeBtn{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-weight: 900;
-      font-size: 12px;
-    }
-    .closeBtn:hover{ background: rgba(255,255,255,.10); }
-
-    @media (max-width: 900px){
-      body{ overflow: hidden; }
-
-      .wrap{
-        grid-template-columns: 1fr;
-        gap: 0;
-        padding: 0;
-        height: calc(100vh - 78px);
-      }
-
+    @media(max-width:900px){
+      .wrap{ grid-template-columns:1fr; }
       aside{ display:none; }
-      .mapwrap{
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
-      }
-      .maphead{
-        border-left:none;
-        border-right:none;
-        border-top:none;
-        border-radius:0;
-      }
-
-      .mobileMenuBtn{ display:inline-flex; }
-      .overlay.show{ display:block; }
-    }
-
-    @media (max-width: 520px){
-      header{ padding: 10px 12px; }
-      .logoWrap{ width:44px; height:44px; border-radius: 12px; }
-      .logoWrap img{ max-width: 36px; max-height: 36px; }
-      .title{ font-size: 14px; white-space: normal; }
-      .subtitle{ display:none; }
-      .panelMobile{ top: 68px; }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="brand">
-      <div class="logoWrap" title="Institut Géographique National">
-        <img src="assets/ign_logo.png" alt="IGN">
-      </div>
-      <div class="brandText">
-        <div class="institution">Institut Géographique National</div>
-        <div class="title">Portail Organisation Administrative — République du Congo</div>
-        <div class="subtitle">Visualisation & téléchargement : limites administratives, chefs-lieux et réseau routier structurant</div>
-      </div>
+<header>
+  <div class="brand">
+    <div class="logoWrap"><img src="assets/ign_logo.png"></div>
+    <div>
+      <div class="institution">Institut Géographique National</div>
+      <div class="title">Portail Organisation Administrative — Congo</div>
     </div>
-
-    <div style="display:flex; align-items:center; gap:10px;">
-      <button class="mobileMenuBtn" id="openPanelBtn" type="button" aria-label="Ouvrir le menu">
-        <span class="hamb" aria-hidden="true"><span></span><span></span><span></span></span>
-        Menu
-      </button>
-
-      <div class="statusPill" id="statusPill">
-        <span class="dot" id="statusDot"></span>
-        <span id="statusText">Chargement…</span>
-      </div>
-    </div>
-  </header>
-
-  <div class="wrap">
-    <!-- Desktop aside -->
-    <aside id="desktopAside">
-      <div class="card">
-        <div class="cardTitle">Filtrer sur</div>
-        <label class="label">Jeu de données affiché</label>
-        <select id="level">
-          <option value="all">Toutes les couches visibles</option>
-          <option value="Limites_departements_congo">Limites des départements</option>
-          <option value="Chef_lieu_district">Chefs-lieux de districts</option>
-          <option value="Chef_lieu_departement">Chefs-lieux de départements</option>
-          <option value="Reseau_routier_structurant">Réseau routier structurant</option>
-        </select>
-        <div class="hint">Astuce : pour afficher/masquer, utilise aussi les cases à cocher.</div>
-      </div>
-
-      <div class="card">
-        <div class="cardTitle">Couches</div>
-        <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites des départements</span></label>
-        <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux de districts</span></label>
-        <label class="check"><input type="checkbox" id="t_cld" checked> <span>Chefs-lieux de départements</span></label>
-        <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
-      </div>
-
-      <div class="card" id="downloads">
-        <div class="cardTitle">Téléchargements</div>
-        <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web • Metadata (txt).</div>
-
-        <div class="dl">
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites des départements</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Limites_departements_congo/metadata.txt">Metadata</a>
-            </div>
-          </div>
-
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de départements</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Chef_lieu_departement/metadata.txt">Metadata</a>
-            </div>
-          </div>
-
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de districts</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Chef_lieu_district/metadata.txt">Metadata</a>
-            </div>
-          </div>
-
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag routes">ROUTES</span> Réseau routier structurant</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Reseau_routier_structurant/metadata.txt">Metadata</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="hint">
-          Si un lien ne marche pas : vérifie que le fichier existe avec exactement le même nom (majuscules/minuscules comprises).
-        </div>
-      </div>
-    </aside>
-
-    <!-- Map -->
-    <section class="mapwrap">
-      <div class="maphead">
-        <div class="badgeRow">
-          <span class="miniBadge">Fond : OpenStreetMap</span>
-          <span class="miniBadge">Portail : GitHub Pages</span>
-        </div>
-        <span class="miniBadge">© IGN / Open Data</span>
-      </div>
-      <div id="map"></div>
-    </section>
   </div>
+</header>
 
-  <!-- Mobile overlay + slide panel -->
-  <div class="overlay" id="overlay"></div>
-
-  <aside class="panelMobile" id="panelMobile" aria-hidden="true">
-    <div class="panelTopRow">
-      <div class="panelTitle">Menu</div>
-      <button class="closeBtn" id="closePanelBtn" type="button" aria-label="Fermer le menu">Fermer</button>
-    </div>
-
-    <div class="card">
-      <div class="cardTitle">Filtrer sur</div>
-      <label class="label">Jeu de données affiché</label>
-      <select id="level_m">
-        <option value="all">Toutes les couches visibles</option>
-        <option value="Limites_departements_congo">Limites des départements</option>
-        <option value="Chef_lieu_district">Chefs-lieux de districts</option>
-        <option value="Chef_lieu_departement">Chefs-lieux de départements</option>
-        <option value="Reseau_routier_structurant">Réseau routier structurant</option>
-      </select>
-      <div class="hint">Astuce : tu peux aussi activer/désactiver les couches ci-dessous.</div>
-    </div>
-
+<div class="wrap">
+  <aside>
     <div class="card">
       <div class="cardTitle">Couches</div>
-      <label class="check"><input type="checkbox" id="t_dep_m" checked> <span>Limites des départements</span></label>
-      <label class="check"><input type="checkbox" id="t_cldist_m" checked> <span>Chefs-lieux de districts</span></label>
-      <label class="check"><input type="checkbox" id="t_cld_m" checked> <span>Chefs-lieux de départements</span></label>
-      <label class="check"><input type="checkbox" id="t_routes_m"> <span>Réseau routier structurant</span></label>
+      <label class="check"><input type="checkbox" id="t_dep" checked> Limites des départements</label>
+      <label class="check"><input type="checkbox" id="t_cld" checked> Chefs-lieux de départements</label>
+      <label class="check"><input type="checkbox" id="t_cldist" checked> Chefs-lieux de districts</label>
     </div>
 
     <div class="card">
       <div class="cardTitle">Téléchargements</div>
-      <div class="hint">SHP (ZIP) • GeoJSON • Metadata.</div>
 
-      <div class="dl">
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites des départements</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Limites_departements_congo/metadata.txt">Metadata</a>
-          </div>
-        </div>
-
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de départements</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Chef_lieu_departement/metadata.txt">Metadata</a>
-          </div>
-        </div>
-
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de districts</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Chef_lieu_district/metadata.txt">Metadata</a>
-          </div>
-        </div>
-
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag routes">ROUTES</span> Réseau routier structurant</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Reseau_routier_structurant/metadata.txt">Metadata</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="hint">Sur mobile, le menu est repliable pour laisser la carte en plein écran.</div>
+      <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP – Limites</a><br><br>
+      <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON – Limites</a><br><br>
+      <a class="btn" href="metadata/Limites_departements_congo/metadata.txt">Metadata</a>
     </div>
   </aside>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    const DATASETS = [
-      {
-        key: "Limites_departements_congo",
-        label: "Limites des départements",
-        geojson: "data/geojson/Limites_departements_congo/limites_departements_congo.geojson",
-        toggleId: "t_dep",
-        defaultVisible: true
-      },
-      {
-        key: "Chef_lieu_departement",
-        label: "Chefs-lieux de départements",
-        geojson: "data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson",
-        toggleId: "t_cld",
-        defaultVisible: true
-      },
-      {
-        key: "Chef_lieu_district",
-        label: "Chefs-lieux de districts",
-        geojson: "data/geojson/Chef_lieu_district/chef_lieu_district.geojson",
-        toggleId: "t_cldist",
-        defaultVisible: true
-      },
-      {
-        key: "Reseau_routier_structurant",
-        label: "Réseau routier structurant",
-        geojson: "data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson",
-        toggleId: "t_routes",
-        defaultVisible: false
-      }
-    ];
+  <div class="mapwrap">
+    <div id="map"></div>
+  </div>
+</div>
 
-    const map = L.map("map", { zoomControl: true }).setView([-1.0, 15.3], 6);
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map("map").setView([-1,15],6);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
-    }).addTo(map);
+function fmt(x){
+  if(x===undefined || x===null || x==="") return "-";
+  return Number(x).toLocaleString("fr-FR");
+}
 
-    const elStatusText = document.getElementById("statusText");
-    const elStatusDot = document.getElementById("statusDot");
+function popupDepartement(p){
+  return `
+    <b>${p.Nom || "Département"}</b><br><br>
+    <b>Superficie (km2)</b> : ${fmt(p["Superficie (km2)"])}<br>
+    <b>Population (RGPH-5, 2023)</b> : ${fmt(p.Population)}<br>
+    <b>Densité de population (hab/km2)</b> : ${fmt(p["Densité"])}
+  `;
+}
 
-    const elLevelDesktop = document.getElementById("level");
-    const elLevelMobile = document.getElementById("level_m");
-
-    const panelMobile = document.getElementById("panelMobile");
-    const overlay = document.getElementById("overlay");
-    const openPanelBtn = document.getElementById("openPanelBtn");
-    const closePanelBtn = document.getElementById("closePanelBtn");
-
-    let layersByKey = {};
-    let boundsAll = null;
-
-    function setStatus(ok, fail){
-      if(fail === 0 && ok > 0){
-        elStatusDot.className = "dot ok";
-        elStatusText.textContent = `OK ${ok} couche(s)`;
-      } else if(ok === 0){
-        elStatusDot.className = "dot bad";
-        elStatusText.textContent = `OK 0 • ⚠️ ${fail} manquant(s)`;
-      } else {
-        elStatusDot.className = "dot";
-        elStatusText.textContent = `OK ${ok} • ⚠️ ${fail} manquant(s)`;
-      }
-    }
-
-    // Points : champ EXACT = "Nom"
-    function getPointName(props){
-      const v = props?.Nom;
-      const s = (v ?? "").toString().trim();
-      return s ? s : "Sans nom";
-    }
-
-    // Départements : essaie plusieurs champs + fallback
-    function getDepartementName(props){
-      const candidates = ["Departement","DEPARTEMENT","département","Departemen","DEPARTEMEN","NOM","Nom","nom","NAME","Name"];
-      for(const k of candidates){
-        const v = props?.[k];
-        const s = (v ?? "").toString().trim();
-        if(s) return s;
-      }
-      for(const [k,v] of Object.entries(props || {})){
-        const s = (v ?? "").toString().trim();
-        if(!s) continue;
-        if(/^\d+(\.\d+)?$/.test(s)) continue;
-        if(s.length <= 80) return s;
-      }
-      return "Sans nom";
-    }
-
-    function styleByKey(key){
-      if(key === "Limites_departements_congo"){
-        return { color: "#000000", weight: 2, fillOpacity: 0.03 };
-      }
-      if(key === "Reseau_routier_structurant"){
-        return { color: "#ef4444", weight: 2, opacity: 0.9 };
-      }
-      return { color: "#f59e0b", weight: 2, opacity: 0.9 };
-    }
-
-    const redPinIcon = L.divIcon({
-      className: "",
-      iconSize: [18, 18],
-      iconAnchor: [9, 18],
-      html: `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13z" fill="#ef4444"/>
-          <circle cx="12" cy="9" r="2.6" fill="#0b1220"/>
-        </svg>
-      `
-    });
-
-    function pointToLayerByKey(dsKey, feature, latlng){
-      if(dsKey === "Chef_lieu_departement" || dsKey === "Chef_lieu_district"){
-        return L.marker(latlng, { icon: redPinIcon });
-      }
-      return L.circleMarker(latlng, { radius: 6, color: "#0b1220", weight: 1, fillColor: "#f59e0b", fillOpacity: 0.95 });
-    }
-
-    function fmtNum(x){
-      if(x === null || x === undefined || x === "") return "-";
-      const n = Number(String(x).replace(",", "."));
-      if(Number.isNaN(n)) return String(x);
-      return n.toLocaleString("fr-FR");
-    }
-
-    function popupDepartement(props){
-      const dep = getDepartementName(props);
-
-      // Champs (avec accents pris en charge)
-      const superficie = props?.["Superficie"] ?? props?.Superficie ?? props?.SUPERFICIE ?? props?.sup ?? props?.area;
-      const densite = props?.["Densité"] ?? props?.Densite ?? props?.DENSITE ?? props?.densite ?? props?.dens ?? props?.density;
-      const population = props?.["Population"] ?? props?.Population ?? props?.POPULATION ?? props?.pop ?? props?.Pop;
-
-      return `
-        <div style="font-family:Arial; min-width:260px">
-          <div style="font-weight:900; font-size:14px; margin-bottom:8px">${dep}</div>
-          <table style="width:100%; border-collapse:collapse; font-size:12px">
-            <tr>
-              <td style="padding:4px 0; color:#666">Superficie (km2)</td>
-              <td style="padding:4px 0; text-align:right"><b>${fmtNum(superficie)}</b></td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0; color:#666">Population (RGPH-5, 2023)</td>
-              <td style="padding:4px 0; text-align:right"><b>${fmtNum(population)}</b></td>
-            </tr>
-            <tr>
-              <td style="padding:4px 0; color:#666">Densité de population (hab/km2)</td>
-              <td style="padding:4px 0; text-align:right"><b>${fmtNum(densite)}</b></td>
-            </tr>
-          </table>
-        </div>
-      `;
-    }
-
-    async function loadDataset(ds){
-      const res = await fetch(ds.geojson);
-      if(!res.ok) throw new Error(`Non chargé: ${ds.geojson}`);
-      const gj = await res.json();
-
-      const layer = L.geoJSON(gj, {
-        style: () => styleByKey(ds.key),
-        pointToLayer: (feature, latlng) => pointToLayerByKey(ds.key, feature, latlng),
-        onEachFeature: (feature, l) => {
-          const props = feature.properties || {};
-
-          if(ds.key === "Limites_departements_congo"){
-            l.bindPopup(popupDepartement(props));
-          } else if(ds.key === "Chef_lieu_departement" || ds.key === "Chef_lieu_district"){
-            const name = getPointName(props);
-            l.bindPopup(`<b>${name}</b><br><span style="font-size:12px;color:#666">${ds.label}</span>`);
-          } else {
-            const name = getDepartementName(props);
-            l.bindPopup(`<b>${name}</b><br><span style="font-size:12px;color:#666">${ds.label}</span>`);
-          }
-
-          // Labels permanents uniquement chefs-lieux de départements
-          if(ds.key === "Chef_lieu_departement"){
-            const name = getPointName(props);
-            l.bindTooltip(name, {
-              permanent: true,
-              direction: "top",
-              offset: [0, -10],
-              opacity: 0.95,
-              className: "lbl"
-            });
-          }
-        }
-      });
-
-      layersByKey[ds.key] = layer;
-
-      const b = layer.getBounds();
-      if(b.isValid()) boundsAll = boundsAll ? boundsAll.extend(b) : b;
-
-      return layer;
-    }
-
-    const toggleMap = [
-      { dsKey: "Limites_departements_congo", d: "t_dep",    m: "t_dep_m" },
-      { dsKey: "Chef_lieu_district",        d: "t_cldist", m: "t_cldist_m" },
-      { dsKey: "Chef_lieu_departement",     d: "t_cld",    m: "t_cld_m" },
-      { dsKey: "Reseau_routier_structurant",d: "t_routes", m: "t_routes_m" }
-    ];
-
-    function setToggleBoth(idDesktop, idMobile, value){
-      const a = document.getElementById(idDesktop);
-      const b = document.getElementById(idMobile);
-      if(a) a.checked = value;
-      if(b) b.checked = value;
-    }
-
-    function syncVisibility(){
-      for(const t of toggleMap){
-        const cb = document.getElementById(t.d);
-        const layer = layersByKey[t.dsKey];
-        if(!layer || !cb) continue;
-
-        const on = cb.checked;
-        const has = map.hasLayer(layer);
-        if(on && !has) layer.addTo(map);
-        if(!on && has) map.removeLayer(layer);
-      }
-    }
-
-    function applyLevelSelection(value){
-      if(value === "all") return;
-
-      for(const t of toggleMap){
-        const shouldOn = (t.dsKey === value);
-        setToggleBoth(t.d, t.m, shouldOn);
-      }
-      syncVisibility();
-    }
-
-    function bindToggleSync(){
-      for(const t of toggleMap){
-        const d = document.getElementById(t.d);
-        const m = document.getElementById(t.m);
-
-        if(d){
-          d.addEventListener("change", () => {
-            setToggleBoth(t.d, t.m, d.checked);
-            syncVisibility();
-          });
-        }
-        if(m){
-          m.addEventListener("change", () => {
-            setToggleBoth(t.d, t.m, m.checked);
-            syncVisibility();
-          });
-        }
-      }
-    }
-
-    function openPanel(){
-      panelMobile.classList.add("open");
-      overlay.classList.add("show");
-      panelMobile.setAttribute("aria-hidden","false");
-      document.body.style.overflow = "hidden";
-      setTimeout(() => map.invalidateSize(), 220);
-    }
-    function closePanel(){
-      panelMobile.classList.remove("open");
-      overlay.classList.remove("show");
-      panelMobile.setAttribute("aria-hidden","true");
-      document.body.style.overflow = "hidden";
-      setTimeout(() => map.invalidateSize(), 220);
-    }
-
-    openPanelBtn.addEventListener("click", openPanel);
-    closePanelBtn.addEventListener("click", closePanel);
-    overlay.addEventListener("click", closePanel);
-    document.addEventListener("keydown", (e) => {
-      if(e.key === "Escape") closePanel();
-    });
-
-    (async function init(){
-      setStatus(0, DATASETS.length);
-
-      let ok = 0, fail = 0;
-      for(const ds of DATASETS){
-        try{
-          await loadDataset(ds);
-          ok++;
-        }catch(e){
-          console.error(e);
-          fail++;
-        }
-      }
-
-      for(const ds of DATASETS){
-        const isOn = !!ds.defaultVisible;
-        const t = toggleMap.find(x => x.dsKey === ds.key);
-        if(t) setToggleBoth(t.d, t.m, isOn);
-      }
-      syncVisibility();
-
-      if(boundsAll?.isValid()) map.fitBounds(boundsAll, {padding:[20,20]});
-
-      bindToggleSync();
-
-      function syncSelects(from, to){
-        if(!from || !to) return;
-        to.value = from.value;
-      }
-
-      elLevelDesktop.addEventListener("change", () => {
-        syncSelects(elLevelDesktop, elLevelMobile);
-        applyLevelSelection(elLevelDesktop.value);
-      });
-      elLevelMobile.addEventListener("change", () => {
-        syncSelects(elLevelMobile, elLevelDesktop);
-        applyLevelSelection(elLevelMobile.value);
-      });
-
-      setStatus(ok, fail);
-
-      window.addEventListener("resize", () => map.invalidateSize());
-      window.addEventListener("orientationchange", () => setTimeout(() => map.invalidateSize(), 250));
-    })();
-  </script>
+fetch("data/geojson/Limites_departements_congo/limites_departements_congo.geojson")
+.then(r=>r.json())
+.then(gj=>{
+  const layer=L.geoJSON(gj,{
+    style:{color:"#000",weight:2,fillOpacity:0.05},
+    onEachFeature:(f,l)=>l.bindPopup(popupDepartement(f.properties))
+  }).addTo(map);
+  map.fitBounds(layer.getBounds());
+});
+</script>
 </body>
 </html>
