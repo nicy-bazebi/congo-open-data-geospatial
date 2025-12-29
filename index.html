@@ -396,19 +396,30 @@
     }
     .closeBtn:hover{ background: rgba(255,255,255,.10); }
 
+    /* ======= PATCH MOBILE (MINIMAL) =======
+       - on SUPPRIME l’UI menu (juste masquée)
+       - on cache l’aside
+       - on déplace #downloads sous la carte via JS
+       - on autorise le scroll page (pour atteindre Téléchargements sous la carte)
+    */
+    #downloadsMobileSlot{ display:none; }
+
     @media (max-width: 900px){
-      body{ overflow: hidden; }
+      body{ overflow: auto; } /* IMPORTANT pour scroller jusqu’aux téléchargements */
       .wrap{
         grid-template-columns: 1fr;
-        gap: 0;
-        padding: 0;
-        height: calc(100vh - 78px);
+        gap: 12px;
+        padding: 12px;
+        height: auto;
       }
       aside{ display:none; }
-      .mapwrap{ border: none; border-radius: 0; box-shadow: none; }
-      .maphead{ border-radius:0; }
-      .mobileMenuBtn{ display:inline-flex; }
-      .overlay.show{ display:block; }
+      .mapwrap{ height: 70vh; } /* carte prioritaire */
+      #downloadsMobileSlot{ display:block; }
+
+      /* on fait disparaître le menu mobile */
+      .mobileMenuBtn{ display:none !important; }
+      .overlay{ display:none !important; }
+      .panelMobile{ display:none !important; }
     }
 
     @media (max-width: 520px){
@@ -512,8 +523,6 @@
             </div>
           </div>
         </div>
-
-        <!-- MODIF 1 : on supprime la phrase inutile (elle était ici avant) -->
       </div>
     </aside>
 
@@ -527,8 +536,12 @@
       </div>
       <div id="map"></div>
     </section>
+
+    <!-- SLOT : sur mobile, on mettra ici la carte Téléchargements (#downloads) -->
+    <div id="downloadsMobileSlot"></div>
   </div>
 
+  <!-- overlay + panel mobile laissés en place (mais MASQUÉS en CSS mobile) pour ne rien casser -->
   <div class="overlay" id="overlay"></div>
 
   <aside class="panelMobile" id="panelMobile" aria-hidden="true">
@@ -730,8 +743,6 @@
 
     function popupDepartement(props){
       const dep = getDepartementName(props);
-
-      // MODIF 2 : la superficie est dans "Superficie (km2)" (espaces+parenthèses => crochets)
       const superficie = props?.["Superficie (km2)"] ?? props?.["Superficie"] ?? props?.Superficie ?? props?.SUPERFICIE;
       const densite = props?.["Densité"] ?? props?.Densite ?? props?.DENSITE ?? props?.densite ?? props?.dens ?? props?.density;
       const population = props?.["Population"] ?? props?.Population ?? props?.POPULATION ?? props?.pop ?? props?.Pop;
@@ -855,7 +866,35 @@
       }
     }
 
+    /* ===== PATCH : déplacement #downloads sous la carte sur mobile ===== */
+    function moveDownloadsOnMobile(){
+      const downloads = document.getElementById("downloads");
+      const desktopAside = document.getElementById("desktopAside");
+      const slot = document.getElementById("downloadsMobileSlot");
+      if(!downloads || !desktopAside || !slot) return;
+
+      // ancre pour remettre au bon endroit en desktop
+      let anchor = document.getElementById("downloadsAnchor");
+      if(!anchor){
+        anchor = document.createElement("div");
+        anchor.id = "downloadsAnchor";
+        downloads.parentNode.insertBefore(anchor, downloads);
+      }
+
+      const isMobile = window.matchMedia("(max-width: 900px)").matches;
+      if(isMobile){
+        if(downloads.parentNode !== slot) slot.appendChild(downloads);
+      }else{
+        // remet dans l'aside juste après l'ancre
+        if(downloads.parentNode !== desktopAside){
+          anchor.parentNode.insertBefore(downloads, anchor.nextSibling);
+        }
+      }
+    }
+
+    /* ===== menu : on garde le code, mais on évite erreurs si éléments masqués/supprimés ===== */
     function openPanel(){
+      if(!panelMobile || !overlay) return;
       panelMobile.classList.add("open");
       overlay.classList.add("show");
       panelMobile.setAttribute("aria-hidden","false");
@@ -863,6 +902,7 @@
       setTimeout(() => map.invalidateSize(), 220);
     }
     function closePanel(){
+      if(!panelMobile || !overlay) return;
       panelMobile.classList.remove("open");
       overlay.classList.remove("show");
       panelMobile.setAttribute("aria-hidden","true");
@@ -870,9 +910,9 @@
       setTimeout(() => map.invalidateSize(), 220);
     }
 
-    openPanelBtn.addEventListener("click", openPanel);
-    closePanelBtn.addEventListener("click", closePanel);
-    overlay.addEventListener("click", closePanel);
+    if(openPanelBtn) openPanelBtn.addEventListener("click", openPanel);
+    if(closePanelBtn) closePanelBtn.addEventListener("click", closePanel);
+    if(overlay) overlay.addEventListener("click", closePanel);
     document.addEventListener("keydown", (e) => {
       if(e.key === "Escape") closePanel();
     });
@@ -899,18 +939,31 @@
 
       function syncSelects(from, to){ if(from && to) to.value = from.value; }
 
-      elLevelDesktop.addEventListener("change", () => {
-        syncSelects(elLevelDesktop, elLevelMobile);
-        applyLevelSelection(elLevelDesktop.value);
-      });
-      elLevelMobile.addEventListener("change", () => {
-        syncSelects(elLevelMobile, elLevelDesktop);
-        applyLevelSelection(elLevelMobile.value);
-      });
+      if(elLevelDesktop && elLevelMobile){
+        elLevelDesktop.addEventListener("change", () => {
+          syncSelects(elLevelDesktop, elLevelMobile);
+          applyLevelSelection(elLevelDesktop.value);
+        });
+        elLevelMobile.addEventListener("change", () => {
+          syncSelects(elLevelMobile, elLevelDesktop);
+          applyLevelSelection(elLevelMobile.value);
+        });
+      }
 
       setStatus(ok, fail);
-      window.addEventListener("resize", () => map.invalidateSize());
-      window.addEventListener("orientationchange", () => setTimeout(() => map.invalidateSize(), 250));
+
+      // applique le patch au chargement + aux changements d’écran
+      moveDownloadsOnMobile();
+      window.addEventListener("resize", () => {
+        moveDownloadsOnMobile();
+        map.invalidateSize();
+      });
+      window.addEventListener("orientationchange", () => {
+        setTimeout(() => {
+          moveDownloadsOnMobile();
+          map.invalidateSize();
+        }, 250);
+      });
     })();
   </script>
 </body>
