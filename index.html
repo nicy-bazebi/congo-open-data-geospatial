@@ -291,7 +291,7 @@
 
     .leaflet-popup-content-wrapper{ border-radius: 14px; }
 
-    /* Labels permanents pour les points */
+    /* Labels permanents (uniquement chefs-lieux de départements) */
     .lbl{
       background: rgba(11,18,32,.88);
       color: #eef5ff;
@@ -342,9 +342,9 @@
         <label class="label">Jeu de données affiché</label>
         <select id="level">
           <option value="all">Toutes les couches visibles</option>
-          <option value="Limites_departements_congo">Limites départements</option>
-          <option value="Chef_lieu_departement">Chefs-lieux départements</option>
-          <option value="Chef_lieu_district">Chefs-lieux districts</option>
+          <option value="Limites_departements_congo">Limites des départements</option>
+          <option value="Chef_lieu_district">Chefs-lieux de districts</option>
+          <option value="Chef_lieu_departement">Chefs-lieux de départements</option>
           <option value="Reseau_routier_structurant">Réseau routier structurant</option>
         </select>
         <div class="hint">Astuce : pour afficher/masquer, utilise aussi les cases à cocher.</div>
@@ -353,9 +353,9 @@
       <!-- Couches -->
       <div class="card">
         <div class="cardTitle">Couches</div>
-        <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites départements</span></label>
-        <label class="check"><input type="checkbox" id="t_cld" checked> <span>Chefs-lieux départements</span></label>
-        <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux districts</span></label>
+        <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites des départements</span></label>
+        <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux de districts</span></label>
+        <label class="check"><input type="checkbox" id="t_cld" checked> <span>Chefs-lieux de départements</span></label>
         <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
       </div>
 
@@ -366,7 +366,7 @@
 
         <div class="dl">
           <div class="dlItem">
-            <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites départements</div>
+            <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites des départements</div>
             <div class="dlLinks">
               <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
               <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
@@ -375,7 +375,7 @@
           </div>
 
           <div class="dlItem">
-            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux départements</div>
+            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de départements</div>
             <div class="dlLinks">
               <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
               <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
@@ -384,7 +384,7 @@
           </div>
 
           <div class="dlItem">
-            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux districts</div>
+            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de districts</div>
             <div class="dlLinks">
               <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
               <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
@@ -425,21 +425,21 @@
     const DATASETS = [
       {
         key: "Limites_departements_congo",
-        label: "Limites départements",
+        label: "Limites des départements",
         geojson: "data/geojson/Limites_departements_congo/limites_departements_congo.geojson",
         toggleId: "t_dep",
         defaultVisible: true
       },
       {
         key: "Chef_lieu_departement",
-        label: "Chefs-lieux départements",
+        label: "Chefs-lieux de départements",
         geojson: "data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson",
         toggleId: "t_cld",
         defaultVisible: true
       },
       {
         key: "Chef_lieu_district",
-        label: "Chefs-lieux districts",
+        label: "Chefs-lieux de districts",
         geojson: "data/geojson/Chef_lieu_district/chef_lieu_district.geojson",
         toggleId: "t_cldist",
         defaultVisible: true
@@ -480,14 +480,14 @@
       }
     }
 
-    // ---- Nom des points : champ EXACT = "Nom"
+    // Points : champ EXACT = "Nom"
     function getPointName(props){
       const v = props?.Nom;
       const s = (v ?? "").toString().trim();
       return s ? s : "Sans nom";
     }
 
-    // ---- Nom du département : on essaie plusieurs champs + fallback
+    // Départements : essaie plusieurs champs + fallback
     function getDepartementName(props){
       const candidates = ["Departement","DEPARTEMENT","département","Departemen","DEPARTEMEN","NOM","Nom","nom","NAME","Name"];
       for(const k of candidates){
@@ -495,7 +495,6 @@
         const s = (v ?? "").toString().trim();
         if(s) return s;
       }
-      // fallback "premier texte plausible"
       for(const [k,v] of Object.entries(props || {})){
         const s = (v ?? "").toString().trim();
         if(!s) continue;
@@ -515,7 +514,7 @@
       return { color: "#f59e0b", weight: 2, opacity: 0.9 };
     }
 
-    // Icône "pin" rouge
+    // Icône "pin" rouge pour points (départements + districts)
     const redPinIcon = L.divIcon({
       className: "",
       iconSize: [18, 18],
@@ -544,7 +543,6 @@
 
     function popupDepartement(props){
       const dep = getDepartementName(props);
-      // champs attendus (d'après ta table)
       const superficie = props?.Superficie ?? props?.SUPERFICIE ?? props?.sup ?? props?.area;
       const densite = props?.Densite ?? props?.DENSITE ?? props?.dens ?? props?.density;
       const population = props?.Population ?? props?.POPULATION ?? props?.pop;
@@ -583,8 +581,8 @@
             l.bindPopup(`<b>${name}</b><br><span style="font-size:12px;color:#666">${ds.label}</span>`);
           }
 
-          // LABELS PERMANENTS OBLIGATOIRES POUR TOUS LES POINTS CHEFS-LIEUX
-          if(ds.key === "Chef_lieu_departement" || ds.key === "Chef_lieu_district"){
+          // Labels permanents uniquement chefs-lieux de départements
+          if(ds.key === "Chef_lieu_departement"){
             const name = getPointName(props);
             l.bindTooltip(name, {
               permanent: true,
