@@ -9,23 +9,18 @@
 
   <style>
     :root{
-      --bg:#0b1220;
-      --panel:#0f172a;
-      --card:#101b33;
       --text:#eef5ff;
       --muted:rgba(238,245,255,.72);
       --line:rgba(255,255,255,.10);
-
-      /* Palette demandée (vert, jaune, rouge) */
       --green:#16a34a;
       --yellow:#f59e0b;
       --red:#ef4444;
-
       --radius:16px;
       --shadow:0 12px 30px rgba(0,0,0,.35);
     }
 
     *{ box-sizing:border-box; }
+    html, body { height: 100%; }
     body{
       margin:0;
       font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
@@ -36,7 +31,6 @@
       color:var(--text);
     }
 
-    /* Header */
     header{
       position: sticky;
       top:0;
@@ -133,13 +127,12 @@
     .dot.ok{ background: var(--green); box-shadow: 0 0 0 4px rgba(22,163,74,.18); }
     .dot.bad{ background: var(--red); box-shadow: 0 0 0 4px rgba(239,68,68,.18); }
 
-    /* Layout */
     .wrap{
       display:grid;
       grid-template-columns: 420px 1fr;
       gap: 14px;
       padding: 14px;
-      height: calc(100vh - 72px);
+      height: calc(100vh - 78px);
     }
 
     aside{
@@ -149,6 +142,7 @@
       box-shadow: var(--shadow);
       padding: 12px;
       overflow:auto;
+      min-height: 0;
     }
 
     .mapwrap{
@@ -159,7 +153,7 @@
       overflow:hidden;
       display:flex;
       flex-direction:column;
-      min-height: 320px;
+      min-height: 0;
     }
 
     .maphead{
@@ -188,9 +182,8 @@
       color: rgba(238,245,255,.9);
     }
 
-    #map{ flex:1; }
+    #map{ flex:1; min-height: 0; }
 
-    /* Cards */
     .card{
       border:1px solid var(--line);
       border-radius: var(--radius);
@@ -209,15 +202,6 @@
       font-size: 13px;
     }
 
-    .pill{
-      font-size:12px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.20);
-      color: rgba(238,245,255,.92);
-    }
-
     .label{
       display:block;
       font-size: 12px;
@@ -225,7 +209,7 @@
       margin-bottom: 6px;
     }
 
-    input, select{
+    select{
       width:100%;
       padding: 10px 12px;
       border-radius: 12px;
@@ -234,14 +218,17 @@
       color: var(--text);
       outline:none;
     }
-    input::placeholder{ color: rgba(238,245,255,.45); }
 
-    .row{
+    .check{
       display:flex;
+      align-items:center;
       gap:10px;
-      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      margin-bottom: 8px;
     }
-    .row > *{ flex:1; }
 
     .btn{
       display:inline-flex;
@@ -258,59 +245,12 @@
     }
     .btn:hover{ background: rgba(255,255,255,.10); }
 
-    .btn.full{ width:100%; }
-
     .hint{
       font-size: 12px;
       color: var(--muted);
       line-height: 1.4;
-      margin-top: 10px;
-    }
-
-    .check{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      margin-bottom: 8px;
-    }
-
-    .legendLine{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
       margin-top: 8px;
-      font-size:12px;
-      color: var(--muted);
     }
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-    }
-    .swatch{ width:10px; height:10px; border-radius:999px; }
-    .swatch.g{ background: var(--green); }
-    .swatch.y{ background: var(--yellow); }
-    .swatch.r{ background: var(--red); }
-
-    .results{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .result{
-      padding: 10px 12px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      cursor:pointer;
-    }
-    .result:hover{ background: rgba(255,255,255,.06); }
-    .result .name{ font-weight:800; font-size:13px; }
-    .result .meta{ font-size:12px; color: var(--muted); margin-top: 3px; }
 
     .dl{
       display:flex;
@@ -345,17 +285,14 @@
       background: rgba(255,255,255,.05);
       color: rgba(238,245,255,.9);
     }
+    .tag.admin{ border-color: rgba(22,163,74,.35); }
+    .tag.points{ border-color: rgba(245,158,11,.35); }
+    .tag.routes{ border-color: rgba(239,68,68,.35); }
 
-    /* Leaflet popup */
-    .leaflet-popup-content-wrapper{
-      border-radius: 14px;
-    }
+    .leaflet-popup-content-wrapper{ border-radius: 14px; }
 
     @media (max-width: 1100px){
-      .wrap{
-        grid-template-columns: 1fr;
-        height: auto;
-      }
+      .wrap{ grid-template-columns: 1fr; height: auto; }
       .mapwrap{ height: 70vh; }
       .title,.subtitle{ white-space: normal; }
     }
@@ -363,14 +300,11 @@
 </head>
 
 <body>
-  <!-- HEADER -->
   <header>
     <div class="brand">
       <div class="logoWrap" title="Institut Géographique National">
-        <!-- Mets le fichier logo ici : assets/ign_logo.png -->
         <img src="assets/ign_logo.png" alt="IGN">
       </div>
-
       <div class="brandText">
         <div class="institution">Institut Géographique National</div>
         <div class="title">Portail Organisation Administrative — République du Congo</div>
@@ -384,103 +318,80 @@
     </div>
   </header>
 
-  <!-- MAIN -->
   <div class="wrap">
-    <!-- PANEL -->
     <aside>
-      
-        <div class="row">
-          <div>
-            <label class="label">Filtrer sur</label>
-            <select id="level">
-              <option value="all">Toutes les couches visibles</option>
-              <option value="Limites_departements_congo">Limites départements</option>
-              <option value="Chef_lieu_departement">Chefs-lieux départements</option>
-              <option value="Chef_lieu_district">Chefs-lieux districts</option>
-              <option value="Reseau_routier_structurant">Réseau routier structurant</option>
-            </select>
-          </div>
-          <div>
-            <label class="label">Champ “nom”</label>
-            <select id="nameField">
-              <option value="nom">nom</option>
-              <option value="NOM">NOM</option>
-              <option value="NAME">NAME</option>
-              <option value="Nom">Nom</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row">
-          <a class="btn full" id="clear">Effacer</a>
-        </div>
-
-        <div class="hint">
-          Clique un résultat pour zoomer et afficher la fiche sur la carte.
-        </div>
+      <!-- Filtrer sur -->
+      <div class="card">
+        <div class="cardTitle">Filtrer sur</div>
+        <label class="label">Jeu de données affiché</label>
+        <select id="level">
+          <option value="all">Toutes les couches visibles</option>
+          <option value="Limites_departements_congo">Limites départements</option>
+          <option value="Chef_lieu_departement">Chefs-lieux départements</option>
+          <option value="Chef_lieu_district">Chefs-lieux districts</option>
+          <option value="Reseau_routier_structurant">Réseau routier structurant</option>
+        </select>
+        <div class="hint">Astuce : pour filtrer réellement, utilise les cases à cocher ci-dessous.</div>
       </div>
 
+      <!-- Couches -->
       <div class="card">
         <div class="cardTitle">Couches</div>
-
         <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites départements</span></label>
         <label class="check"><input type="checkbox" id="t_cld" checked> <span>Chefs-lieux départements</span></label>
         <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux districts</span></label>
         <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
-
-        </div>
       </div>
 
-  <div class="card" id="downloads">
+      <!-- Téléchargements -->
+      <div class="card" id="downloads">
         <div class="cardTitle">Téléchargements</div>
-        <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web. Les liens pointent vers ton dossier <b>data/</b>.</div>
+        <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web.</div>
 
         <div class="dl">
           <div class="dlItem">
-            <div class="dlTitle"><span class="tag">ADMIN</span> Limites départements</div>
+            <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites départements</div>
             <div class="dlLinks">
               <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Limites_departements_congo/Limites_departements_congo.geojson">GeoJSON</a>
+              <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
             </div>
           </div>
 
           <div class="dlItem">
-            <div class="dlTitle"><span class="tag">POINTS</span> Chefs-lieux départements</div>
+            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux départements</div>
             <div class="dlLinks">
               <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Chef_lieu_departement/Chef_lieu_departement.geojson">GeoJSON</a>
+              <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
             </div>
           </div>
 
           <div class="dlItem">
-            <div class="dlTitle"><span class="tag">POINTS</span> Chefs-lieux districts</div>
+            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux districts</div>
             <div class="dlLinks">
               <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Chef_lieu_district/Chef_lieu_district.geojson">GeoJSON</a>
+              <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
             </div>
           </div>
 
           <div class="dlItem">
-            <div class="dlTitle"><span class="tag">ROUTES</span> Réseau routier structurant</div>
+            <div class="dlTitle"><span class="tag routes">ROUTES</span> Réseau routier structurant</div>
             <div class="dlLinks">
               <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Reseau_routier_structurant/Reseau_routier_structurant.geojson">GeoJSON</a>
+              <a class="btn" href="data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson">GeoJSON</a>
             </div>
           </div>
         </div>
 
         <div class="hint">
-          Si un lien ZIP ne fonctionne pas : vérifie simplement que le fichier <b>.zip</b> existe avec exactement le même nom (majuscules/minuscules incluses).
+          Si un ZIP ne marche pas : vérifie que le fichier existe avec exactement le même nom (majuscules/minuscules comprises).
         </div>
       </div>
     </aside>
 
-    <!-- MAP -->
     <section class="mapwrap">
       <div class="maphead">
         <div class="badgeRow">
           <span class="miniBadge">Fond : OpenStreetMap</span>
-          <span class="miniBadge">CRS web : EPSG:4326</span>
           <span class="miniBadge">Portail : GitHub Pages</span>
         </div>
         <span class="miniBadge">© IGN / Open Data</span>
@@ -491,10 +402,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // ============================
-    // 1) CONFIG : chemins des GeoJSON
-    // ============================
-    // IMPORTANT : ces chemins doivent correspondre EXACTEMENT à ton dépôt GitHub.
     const DATASETS = [
       {
         key: "Limites_departements_congo",
@@ -526,9 +433,6 @@
       }
     ];
 
-    // ============================
-    // 2) CARTE
-    // ============================
     const map = L.map("map").setView([-1.0, 15.3], 6);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -536,138 +440,12 @@
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
 
-    // ============================
-    // 3) UI
-    // ============================
-    const elQ = document.getElementById("q");
-    const elLevel = document.getElementById("level");
-    const elNameField = document.getElementById("nameField");
-    const elResults = document.getElementById("results");
-    const elCount = document.getElementById("count");
-    const elClear = document.getElementById("clear");
-
     const elStatusText = document.getElementById("statusText");
     const elStatusDot = document.getElementById("statusDot");
+    const elLevel = document.getElementById("level");
 
     let layersByKey = {};
-    let allItems = []; // {datasetKey, datasetLabel, feature, layerRef}
     let boundsAll = null;
-
-    function norm(s){
-      return (s ?? "").toString().trim().toLowerCase()
-        .normalize("NFD").replace(/\p{Diacritic}/gu,"");
-    }
-
-    function getName(props){
-      const f = elNameField.value;
-      return props?.[f] ?? props?.nom ?? props?.NOM ?? props?.NAME ?? props?.Nom ?? "Sans nom";
-    }
-
-    function getCode(props){
-      return props?.code ?? props?.CODE ?? props?.id ?? props?.ID ?? "-";
-    }
-
-    function popupHtml(datasetLabel, props){
-      const name = getName(props);
-      const code = getCode(props);
-      return `
-        <div style="font-family:Arial; min-width:230px">
-          <div style="font-weight:800; font-size:14px; margin-bottom:6px">${name}</div>
-          <div style="font-size:12px; color:#666; margin-bottom:6px">${datasetLabel}</div>
-          <div style="font-size:12px"><b>Code</b> : ${code}</div>
-        </div>
-      `;
-    }
-
-    function setCount(n){ elCount.textContent = String(n); }
-
-    function syncVisibility(){
-      for(const ds of DATASETS){
-        const cb = document.getElementById(ds.toggleId);
-        const layer = layersByKey[ds.key];
-        if(!layer || !cb) continue;
-        const on = cb.checked;
-        const has = map.hasLayer(layer);
-        if(on && !has) layer.addTo(map);
-        if(!on && has) map.removeLayer(layer);
-      }
-    }
-
-    function visibleKeys(){
-      const keys = new Set();
-      for(const ds of DATASETS){
-        const cb = document.getElementById(ds.toggleId);
-        if(cb?.checked) keys.add(ds.key);
-      }
-      return keys;
-    }
-
-    function renderResults(items){
-      elResults.innerHTML = "";
-      if(!items.length){
-        setCount(0);
-        elResults.innerHTML = `<div class="hint">Aucun résultat.</div>`;
-        return;
-      }
-      setCount(items.length);
-      for(const item of items.slice(0, 250)){
-        const props = item.feature.properties || {};
-        const div = document.createElement("div");
-        div.className = "result";
-        div.innerHTML = `
-          <div class="name">${getName(props)}</div>
-          <div class="meta">${item.datasetLabel} • Code: ${getCode(props)}</div>
-        `;
-        div.addEventListener("click", () => {
-          try{
-            const b = item.layerRef.getBounds?.();
-            if(b && b.isValid()) map.fitBounds(b, {padding:[20,20]});
-          }catch(e){}
-          item.layerRef.openPopup();
-        });
-        elResults.appendChild(div);
-      }
-    }
-
-    function applyFilters(){
-      const q = norm(elQ.value);
-      const lev = elLevel.value;
-      const vis = visibleKeys();
-
-      let matches = allItems.filter(it => {
-        if(!vis.has(it.datasetKey)) return false;
-        if(lev !== "all" && it.datasetKey !== lev) return false;
-        if(!q) return true;
-
-        const props = it.feature.properties || {};
-        const name = norm(getName(props));
-        const code = norm(getCode(props));
-        return name.includes(q) || code.includes(q);
-      });
-
-      matches.sort((a,b) => norm(getName(a.feature.properties)).localeCompare(norm(getName(b.feature.properties))));
-      renderResults(matches);
-    }
-
-    async function loadDataset(ds){
-      const res = await fetch(ds.geojson);
-      if(!res.ok) throw new Error(`Non chargé: ${ds.geojson}`);
-      const gj = await res.json();
-
-      const layer = L.geoJSON(gj, {
-        onEachFeature: (feature, l) => {
-          l.bindPopup(popupHtml(ds.label, feature.properties || {}));
-          allItems.push({datasetKey: ds.key, datasetLabel: ds.label, feature, layerRef: l});
-        }
-      });
-
-      layersByKey[ds.key] = layer;
-
-      const b = layer.getBounds();
-      if(b.isValid()) boundsAll = boundsAll ? boundsAll.extend(b) : b;
-
-      return layer;
-    }
 
     function setStatus(ok, fail){
       if(fail === 0 && ok > 0){
@@ -682,11 +460,74 @@
       }
     }
 
+    function styleByKey(key){
+      if(key === "Limites_departements_congo"){
+        return { color: "#16a34a", weight: 2, fillOpacity: 0.05 };
+      }
+      if(key === "Reseau_routier_structurant"){
+        return { color: "#ef4444", weight: 2, opacity: 0.9 };
+      }
+      return { color: "#f59e0b", weight: 2, opacity: 0.9, fillOpacity: 0.9 };
+    }
+
+    function markerByKey(key){
+      // points (chefs-lieux)
+      return { radius: 6, color: "#0b1220", weight: 1, fillColor: "#f59e0b", fillOpacity: 0.95 };
+    }
+
+    async function loadDataset(ds){
+      const res = await fetch(ds.geojson);
+      if(!res.ok) throw new Error(`Non chargé: ${ds.geojson}`);
+      const gj = await res.json();
+
+      const layer = L.geoJSON(gj, {
+        style: () => styleByKey(ds.key),
+        pointToLayer: (feature, latlng) => L.circleMarker(latlng, markerByKey(ds.key)),
+        onEachFeature: (feature, l) => {
+          const props = feature.properties || {};
+          const name = props.nom ?? props.NOM ?? props.NAME ?? props.Nom ?? "Sans nom";
+          l.bindPopup(`<b>${name}</b><br><span style="font-size:12px;color:#666">${ds.label}</span>`);
+        }
+      });
+
+      layersByKey[ds.key] = layer;
+
+      const b = layer.getBounds();
+      if(b.isValid()) boundsAll = boundsAll ? boundsAll.extend(b) : b;
+
+      return layer;
+    }
+
+    function syncVisibility(){
+      for(const ds of DATASETS){
+        const cb = document.getElementById(ds.toggleId);
+        const layer = layersByKey[ds.key];
+        if(!layer || !cb) continue;
+
+        const on = cb.checked;
+        const has = map.hasLayer(layer);
+        if(on && !has) layer.addTo(map);
+        if(!on && has) map.removeLayer(layer);
+      }
+    }
+
+    function applyLevelSelection(){
+      const v = elLevel.value;
+      if(v === "all") return;
+
+      // Active uniquement la couche choisie (si elle existe)
+      for(const ds of DATASETS){
+        const cb = document.getElementById(ds.toggleId);
+        if(!cb) continue;
+        cb.checked = (ds.key === v);
+      }
+      syncVisibility();
+    }
+
     (async function init(){
       setStatus(0, DATASETS.length);
 
       let ok = 0, fail = 0;
-
       for(const ds of DATASETS){
         try{
           await loadDataset(ds);
@@ -697,35 +538,21 @@
         }
       }
 
-      // Visibilité initiale
+      // état initial
       for(const ds of DATASETS){
         const cb = document.getElementById(ds.toggleId);
         if(cb) cb.checked = ds.defaultVisible;
       }
       syncVisibility();
 
-      // Zoom global si possible
       if(boundsAll?.isValid()) map.fitBounds(boundsAll, {padding:[20,20]});
 
-      // Events
-      elQ.addEventListener("input", applyFilters);
-      elLevel.addEventListener("change", applyFilters);
-      elNameField.addEventListener("change", applyFilters);
-
+      // events
       for(const ds of DATASETS){
-        document.getElementById(ds.toggleId)?.addEventListener("change", () => {
-          syncVisibility();
-          applyFilters();
-        });
+        document.getElementById(ds.toggleId)?.addEventListener("change", syncVisibility);
       }
+      elLevel.addEventListener("change", applyLevelSelection);
 
-      elClear.addEventListener("click", () => {
-        elQ.value = "";
-        elLevel.value = "all";
-        applyFilters();
-      });
-
-      applyFilters();
       setStatus(ok, fail);
     })();
   </script>
