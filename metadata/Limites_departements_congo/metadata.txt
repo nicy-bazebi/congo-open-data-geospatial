@@ -1,0 +1,24 @@
+Description 
+Ce thème décrit les limites administratives des départements de la République du Congo. Selon la loi n°3-2003 du 17 janvier 2003 fixant organisation administrative du territoire, le département est considéré comme la première subdivision administrative du pays. Il est constitué d’un ensemble des districts et des communes. La donnée originale a été produite dans le cadre du PUDT, lors de l’atelier du 09 au 12 juillet 2025, par l’Institut Géographique National du Ministère de la Recherche Scientifique et de l’Innovation Technologique (IGN/MRSIT), en collaboration avec le Ministère de l’Intérieur et de la Décentralisation (MID), l’Institut National de la Statistique du Ministère de l’Économie, du Plan et de l’Intégration Régionale (INS/MEPIR), ainsi que les ministères sectoriels du PUDT : le Ministère de l’Économie Forestière (MEF), le Ministère des Industries Minières et de la Géologie (MIMG), le Ministère de l’Environnement, du Développement Durable et du Bassin du Congo (MEDDBC) et le Ministère de l’Agriculture, de l’Élevage et de la Pêche (MAEP). Cette production a bénéficié de l’appui du Centre de coopération internationale en recherche agronomique pour le développement (CIRAD) et du soutien technique du World Resources Institute (WRI), sous financement de l’Initiative pour les Forêts de l’Afrique Centrale (CAFI). Elle intègre le nouveau découpage administratif défini par les textes suivants :
+• Loi n° 25-2024 (création du département du Djoué-Léfini) 
+• Loi n° 26-2024 (création du département de la Nkéni-Alima) 
+• Loi n° 27-2024 (création du département du Congo-Oubangui) 
+• Loi n° 29-2024 (redéfinition du ressort territorial du département de Brazzaville) 
+• Loi n° 30-2024 (redéfinition du ressort territorial du département de la Cuvette) 
+• Loi n° 31-2024 (redéfinition du ressort territorial du département de la Likouala) 
+• Loi n° 32-2024 (redéfinition du ressort territorial du département des Plateaux) 
+• Loi n° 33-2024 (redéfinition du ressort territorial du département du Pool) 
+• Loi n° 34-2024 (redéfinition du ressort territorial du district de Ngabé)
+
+Source
+• Textes officiels de délimitation : Ministère de l’Intérieur et de la Décentralisation (MID)
+• Numérisation cartographique sur fond de la carte topographique du Congo au 1 : 200 000 (Geoconsult, 2015) : Institut Géographique National (IGN)
+• Données démographiques : RGPH-5 (2023), Institut National de la Statistique (INS)
+
+Échelle : 1 : 200 000
+
+Contact : Direction scientifique – Institut Géographique National (IGN)
+
+Système de référence : WGS84 / EPSG : 4326
+
+Licence d’utilisation (ex. CC-BY 4.0)
