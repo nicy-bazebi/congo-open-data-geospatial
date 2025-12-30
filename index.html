@@ -187,12 +187,10 @@
       color: rgba(238,245,255,.9);
     }
 
-    /* ✅ FIX PRINCIPAL :
-       on remet un parent flex (.mapBody) + un #map qui prend une hauteur réelle */
     .mapBody{
       flex: 1 1 auto;
       min-height: 0;
-      overflow: auto; /* permet d'aller jusqu'à Documentation sous la carte si besoin */
+      overflow: auto;
       -webkit-overflow-scrolling: touch;
       padding: 12px;
       display:flex;
@@ -202,7 +200,6 @@
 
     .mapInner{
       flex: 0 0 auto;
-      /* hauteur de la carte en desktop : elle remplit l'espace dispo du viewport */
       height: calc(100vh - 78px - 14px - 14px - 52px - 24px);
       min-height: 320px;
       border:1px solid var(--line);
@@ -213,7 +210,7 @@
 
     #map{
       width:100%;
-      height:100%; /* ✅ indispensable : Leaflet a besoin d'une hauteur */
+      height:100%;
     }
 
     .card{
@@ -355,22 +352,6 @@
       font-size: 12px;
       white-space: nowrap;
     }
-    .hamb{
-      width: 14px;
-      height: 10px;
-      display:inline-block;
-      position: relative;
-    }
-    .hamb span{
-      position:absolute;
-      left:0; right:0;
-      height:2px;
-      background: rgba(238,245,255,.85);
-      border-radius: 2px;
-    }
-    .hamb span:nth-child(1){ top:0; }
-    .hamb span:nth-child(2){ top:4px; opacity:.85; }
-    .hamb span:nth-child(3){ top:8px; opacity:.7; }
 
     .overlay{
       display:none;
@@ -379,59 +360,10 @@
       background: rgba(0,0,0,.55);
       z-index: 1400;
     }
+    .panelMobile{ display:none; }
 
-    .panelMobile{
-      position: fixed;
-      top: 78px;
-      right: 0;
-      bottom: 0;
-      width: min(420px, 92vw);
-      background: rgba(11,18,32,.95);
-      border-left: 1px solid var(--line);
-      z-index: 1500;
-      transform: translateX(105%);
-      transition: transform .25s ease;
-      box-shadow: -20px 0 40px rgba(0,0,0,.4);
-      padding: 12px;
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-      border-top: 1px solid var(--line);
-    }
-    .panelMobile.open{ transform: translateX(0); }
-
-    .panelTopRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--line);
-    }
-    .panelTitle{
-      font-weight: 900;
-      font-size: 13px;
-      letter-spacing: .2px;
-    }
-    .closeBtn{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-weight: 900;
-      font-size: 12px;
-    }
-    .closeBtn:hover{ background: rgba(255,255,255,.10); }
-
-    /* ======= PATCH MOBILE (MINIMAL) =======
-       - on SUPPRIME l’UI menu (juste masquée)
-       - on cache l’aside
-       - on déplace #downloads sous la carte via JS
-       - on autorise le scroll page (pour atteindre Téléchargements sous la carte)
-    */
     #downloadsMobileSlot{ display:none; }
+    #mobileControlsSlot{ display:none; }
 
     @media (max-width: 900px){
       body{ overflow: auto; }
@@ -445,9 +377,11 @@
       .mapwrap{ border-radius: var(--radius); }
       .mapBody{ padding: 12px; }
       .mapInner{
-        height: 70vh; /* ✅ carte visible en mobile */
+        height: 62vh;
         min-height: 360px;
       }
+
+      #mobileControlsSlot{ display:block; }
       #downloadsMobileSlot{ display:block; }
 
       .mobileMenuBtn{ display:none !important; }
@@ -461,10 +395,8 @@
       .logoWrap img{ max-width: 36px; max-height: 36px; }
       .title{ font-size: 14px; white-space: normal; }
       .subtitle{ display:none; }
-      .panelMobile{ top: 68px; }
     }
 
-    /* Documentation panel (style identique aux cards existantes) */
     .docBtns{
       display:flex;
       gap:10px;
@@ -488,7 +420,6 @@
 
     <div style="display:flex; align-items:center; gap:10px;">
       <button class="mobileMenuBtn" id="openPanelBtn" type="button" aria-label="Ouvrir le menu">
-        <span class="hamb" aria-hidden="true"><span></span><span></span><span></span></span>
         Menu
       </button>
 
@@ -506,20 +437,22 @@
         <label class="label">Jeu de données affiché</label>
         <select id="level">
           <option value="all">Toutes les couches visibles</option>
-          <option value="Limites_departements_congo">Limites des départements</option>
-          <option value="Chef_lieu_district">Chefs-lieux de districts</option>
+          <!-- ✅ ordre demandé -->
           <option value="Chef_lieu_departement">Chefs-lieux de départements</option>
+          <option value="Chef_lieu_district">Chefs-lieux de districts</option>
           <option value="Reseau_routier_structurant">Réseau routier structurant</option>
+          <option value="Limites_departements_congo">Limites des départements</option>
         </select>
         <div class="hint">Astuce : pour afficher/masquer, utilise aussi les cases à cocher.</div>
       </div>
 
-      <div class="card">
+      <div class="card" id="layersCard">
         <div class="cardTitle">Couches</div>
-        <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites des départements</span></label>
-        <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux de districts</span></label>
+        <!-- ✅ ordre demandé -->
         <label class="check"><input type="checkbox" id="t_cld" checked> <span>Chefs-lieux de départements</span></label>
+        <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux de districts</span></label>
         <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
+        <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites des départements</span></label>
       </div>
 
       <div class="card" id="downloads">
@@ -575,13 +508,13 @@
         <span class="miniBadge">© IGN / Open Data</span>
       </div>
 
-      <!-- ✅ NEW container that guarantees a real map height -->
       <div class="mapBody">
+        <div id="mobileControlsSlot"></div>
+
         <div class="mapInner">
           <div id="map"></div>
         </div>
 
-        <!-- ✅ Documentation & Cartes (sous la carte pour tous les écrans) -->
         <div class="card" id="docsPanel">
           <div class="cardTitle">Documentation &amp; Cartes</div>
           <div class="docBtns">
@@ -595,96 +528,16 @@
       </div>
     </section>
 
-    <!-- SLOT : sur mobile, on mettra ici la carte Téléchargements (#downloads) -->
     <div id="downloadsMobileSlot"></div>
   </div>
 
-  <!-- overlay + panel mobile laissés en place (mais MASQUÉS en CSS mobile) pour ne rien casser -->
   <div class="overlay" id="overlay"></div>
-
-  <aside class="panelMobile" id="panelMobile" aria-hidden="true">
-    <div class="panelTopRow">
-      <div class="panelTitle">Menu</div>
-      <button class="closeBtn" id="closePanelBtn" type="button" aria-label="Fermer le menu">Fermer</button>
-    </div>
-
-    <div class="card">
-      <div class="cardTitle">Filtrer sur</div>
-      <label class="label">Jeu de données affiché</label>
-      <select id="level_m">
-        <option value="all">Toutes les couches visibles</option>
-        <option value="Limites_departements_congo">Limites des départements</option>
-        <option value="Chef_lieu_district">Chefs-lieux de districts</option>
-        <option value="Chef_lieu_departement">Chefs-lieux de départements</option>
-        <option value="Reseau_routier_structurant">Réseau routier structurant</option>
-      </select>
-      <div class="hint">Astuce : tu peux aussi activer/désactiver les couches ci-dessous.</div>
-    </div>
-
-    <div class="card">
-      <div class="cardTitle">Couches</div>
-      <label class="check"><input type="checkbox" id="t_dep_m" checked> <span>Limites des départements</span></label>
-      <label class="check"><input type="checkbox" id="t_cldist_m" checked> <span>Chefs-lieux de districts</span></label>
-      <label class="check"><input type="checkbox" id="t_cld_m" checked> <span>Chefs-lieux de départements</span></label>
-      <label class="check"><input type="checkbox" id="t_routes_m"> <span>Réseau routier structurant</span></label>
-    </div>
-
-    <div class="card">
-      <div class="cardTitle">Téléchargements</div>
-      <div class="hint">SHP (ZIP) • GeoJSON • Metadata.</div>
-
-      <div class="dl">
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites des départements</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Limites_departements_congo/metadata.txt">Metadata</a>
-          </div>
-        </div>
-
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de départements</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Chef_lieu_departement/metadata.txt">Metadata</a>
-          </div>
-        </div>
-
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de districts</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Chef_lieu_district/metadata.txt">Metadata</a>
-          </div>
-        </div>
-
-        <div class="dlItem">
-          <div class="dlTitle"><span class="tag routes">ROUTES</span> Réseau routier structurant</div>
-          <div class="dlLinks">
-            <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
-            <a class="btn" href="data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson">GeoJSON</a>
-            <a class="btn" href="metadata/Reseau_routier_structurant/metadata.txt">Metadata</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="hint">Sur mobile, le menu est repliable pour laisser la carte en plein écran.</div>
-    </div>
-  </aside>
+  <aside class="panelMobile" id="panelMobile" aria-hidden="true"></aside>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    /* ✅ ordre demandé (utilisé pour le chargement + l’interface si tu la relies ensuite) */
     const DATASETS = [
-      {
-        key: "Limites_departements_congo",
-        label: "Limites des départements",
-        geojson: "data/geojson/Limites_departements_congo/limites_departements_congo.geojson",
-        toggleId: "t_dep",
-        defaultVisible: true
-      },
       {
         key: "Chef_lieu_departement",
         label: "Chefs-lieux de départements",
@@ -705,6 +558,13 @@
         geojson: "data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson",
         toggleId: "t_routes",
         defaultVisible: false
+      },
+      {
+        key: "Limites_departements_congo",
+        label: "Limites des départements",
+        geojson: "data/geojson/Limites_departements_congo/limites_departements_congo.geojson",
+        toggleId: "t_dep",
+        defaultVisible: true
       }
     ];
 
@@ -718,7 +578,7 @@
     const elStatusText = document.getElementById("statusText");
     const elStatusDot = document.getElementById("statusDot");
     const elLevelDesktop = document.getElementById("level");
-    const elLevelMobile = document.getElementById("level_m");
+    const elLevelMobile = document.getElementById("level_m"); // (non utilisé en mobile ici)
 
     const panelMobile = document.getElementById("panelMobile");
     const overlay = document.getElementById("overlay");
@@ -868,19 +728,13 @@
       return layer;
     }
 
+    /* ✅ ordre demandé aussi pour la synchro (checkbox -> couche) */
     const toggleMap = [
-      { dsKey: "Limites_departements_congo", d: "t_dep",    m: "t_dep_m" },
-      { dsKey: "Chef_lieu_district",        d: "t_cldist", m: "t_cldist_m" },
-      { dsKey: "Chef_lieu_departement",     d: "t_cld",    m: "t_cld_m" },
-      { dsKey: "Reseau_routier_structurant",d: "t_routes", m: "t_routes_m" }
+      { dsKey: "Chef_lieu_departement",      d: "t_cld" },
+      { dsKey: "Chef_lieu_district",         d: "t_cldist" },
+      { dsKey: "Reseau_routier_structurant", d: "t_routes" },
+      { dsKey: "Limites_departements_congo", d: "t_dep" }
     ];
-
-    function setToggleBoth(idDesktop, idMobile, value){
-      const a = document.getElementById(idDesktop);
-      const b = document.getElementById(idMobile);
-      if(a) a.checked = value;
-      if(b) b.checked = value;
-    }
 
     function syncVisibility(){
       for(const t of toggleMap){
@@ -895,29 +749,11 @@
       }
     }
 
-    function applyLevelSelection(value){
-      if(value === "all") return;
-      for(const t of toggleMap){
-        const shouldOn = (t.dsKey === value);
-        setToggleBoth(t.d, t.m, shouldOn);
-      }
-      syncVisibility();
-    }
-
     function bindToggleSync(){
       for(const t of toggleMap){
         const d = document.getElementById(t.d);
-        const m = document.getElementById(t.m);
-
         if(d){
           d.addEventListener("change", () => {
-            setToggleBoth(t.d, t.m, d.checked);
-            syncVisibility();
-          });
-        }
-        if(m){
-          m.addEventListener("change", () => {
-            setToggleBoth(t.d, t.m, m.checked);
             syncVisibility();
           });
         }
@@ -947,29 +783,28 @@
       }
     }
 
-    function openPanel(){
-      if(!panelMobile || !overlay) return;
-      panelMobile.classList.add("open");
-      overlay.classList.add("show");
-      panelMobile.setAttribute("aria-hidden","false");
-      document.body.style.overflow = "hidden";
-      setTimeout(() => map.invalidateSize(), 220);
-    }
-    function closePanel(){
-      if(!panelMobile || !overlay) return;
-      panelMobile.classList.remove("open");
-      overlay.classList.remove("show");
-      panelMobile.setAttribute("aria-hidden","true");
-      document.body.style.overflow = "hidden";
-      setTimeout(() => map.invalidateSize(), 220);
-    }
+    function moveLayersCardOnMobile(){
+      const layersCard = document.getElementById("layersCard");
+      const desktopAside = document.getElementById("desktopAside");
+      const slot = document.getElementById("mobileControlsSlot");
+      if(!layersCard || !desktopAside || !slot) return;
 
-    if(openPanelBtn) openPanelBtn.addEventListener("click", openPanel);
-    if(closePanelBtn) closePanelBtn.addEventListener("click", closePanel);
-    if(overlay) overlay.addEventListener("click", closePanel);
-    document.addEventListener("keydown", (e) => {
-      if(e.key === "Escape") closePanel();
-    });
+      let anchor = document.getElementById("layersAnchor");
+      if(!anchor){
+        anchor = document.createElement("div");
+        anchor.id = "layersAnchor";
+        layersCard.parentNode.insertBefore(anchor, layersCard);
+      }
+
+      const isMobile = window.matchMedia("(max-width: 900px)").matches;
+      if(isMobile){
+        if(layersCard.parentNode !== slot) slot.appendChild(layersCard);
+      }else{
+        if(layersCard.parentNode !== desktopAside){
+          anchor.parentNode.insertBefore(layersCard, anchor.nextSibling);
+        }
+      }
+    }
 
     (async function init(){
       setStatus(0, DATASETS.length);
@@ -982,8 +817,11 @@
 
       for(const ds of DATASETS){
         const isOn = !!ds.defaultVisible;
-        const t = toggleMap.find(x => x.dsKey === ds.key);
-        if(t) setToggleBoth(t.d, t.m, isOn);
+        const mapItem = toggleMap.find(x => x.dsKey === ds.key);
+        if(mapItem){
+          const cb = document.getElementById(mapItem.d);
+          if(cb) cb.checked = isOn;
+        }
       }
       syncVisibility();
 
@@ -991,32 +829,21 @@
 
       bindToggleSync();
 
-      function syncSelects(from, to){ if(from && to) to.value = from.value; }
-
-      if(elLevelDesktop && elLevelMobile){
-        elLevelDesktop.addEventListener("change", () => {
-          syncSelects(elLevelDesktop, elLevelMobile);
-          applyLevelSelection(elLevelDesktop.value);
-        });
-        elLevelMobile.addEventListener("change", () => {
-          syncSelects(elLevelMobile, elLevelDesktop);
-          applyLevelSelection(elLevelMobile.value);
-        });
-      }
-
       setStatus(ok, fail);
 
+      moveLayersCardOnMobile();
       moveDownloadsOnMobile();
 
-      // ✅ IMPORTANT : Leaflet doit recalculer la taille quand la carte est visible
       setTimeout(() => map.invalidateSize(true), 50);
 
       window.addEventListener("resize", () => {
+        moveLayersCardOnMobile();
         moveDownloadsOnMobile();
         map.invalidateSize();
       });
       window.addEventListener("orientationchange", () => {
         setTimeout(() => {
+          moveLayersCardOnMobile();
           moveDownloadsOnMobile();
           map.invalidateSize();
         }, 250);
