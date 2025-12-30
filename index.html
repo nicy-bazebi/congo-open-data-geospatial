@@ -188,6 +188,23 @@
 
     #map{ flex:1; min-height: 0; }
 
+    /* IMPORTANT: permet d'empiler Carte + panneau "Documentation & Cartes" */
+    .mapBody{
+      flex:1;
+      min-height:0;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px;
+    }
+    .mapInner{
+      height: 70vh;
+      min-height: 320px;
+      border-radius: 14px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.10);
+    }
+
     .card{
       border:1px solid var(--line);
       border-radius: var(--radius);
@@ -404,60 +421,8 @@
     */
     #downloadsMobileSlot{ display:none; }
 
-    /* === NOUVEAU : documentation sous la carte (slot) === */
-    #docsUnderMap{
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panelBg);
-      box-shadow: var(--shadow);
-      padding: 12px;
-      margin-top: 12px;
-      overflow: hidden;
-    }
-    .docsGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .docsPreview{
-      border:1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(0,0,0,.18);
-      padding: 10px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .docsImgWrap{
-      border-radius: 14px;
-      border:1px solid var(--line);
-      overflow:hidden;
-      background: rgba(0,0,0,.12);
-    }
-    .docsImgWrap img{
-      display:block;
-      width:100%;
-      height:auto;
-    }
-    .docsActions{
-      display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-    }
-    .docsNote{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      font-size: 12px;
-      color: rgba(238,245,255,.86);
-      line-height: 1.5;
-    }
-
     @media (max-width: 900px){
-      body{ overflow: auto; } /* IMPORTANT pour scroller */
+      body{ overflow: auto; } /* IMPORTANT pour scroller jusqu’aux téléchargements */
       .wrap{
         grid-template-columns: 1fr;
         gap: 12px;
@@ -465,15 +430,16 @@
         height: auto;
       }
       aside{ display:none; }
-      .mapwrap{ height: 70vh; }
+      .mapwrap{ height: auto; } /* carte + doc panel */
       #downloadsMobileSlot{ display:block; }
 
+      /* on fait disparaître le menu mobile */
       .mobileMenuBtn{ display:none !important; }
       .overlay{ display:none !important; }
       .panelMobile{ display:none !important; }
 
-      /* docs : une seule colonne sur mobile */
-      .docsGrid{ grid-template-columns: 1fr; }
+      /* carte un peu plus haute sur mobile */
+      .mapInner{ height: 68vh; }
     }
 
     @media (max-width: 520px){
@@ -580,62 +546,43 @@
       </div>
     </aside>
 
-    <div>
-      <section class="mapwrap">
-        <div class="maphead">
-          <div class="badgeRow">
-            <span class="miniBadge">Fond : OpenStreetMap</span>
-            <span class="miniBadge">Portail : GitHub Pages</span>
-          </div>
-          <span class="miniBadge">© IGN / Open Data</span>
+    <section class="mapwrap">
+      <div class="maphead">
+        <div class="badgeRow">
+          <span class="miniBadge">Fond : OpenStreetMap</span>
+          <span class="miniBadge">Portail : GitHub Pages</span>
         </div>
-        <div id="map"></div>
-      </section>
+        <span class="miniBadge">© IGN / Open Data</span>
+      </div>
 
-      <!-- === NOUVELLE SECTION : Documentation & Cartes (sous la carte, tous écrans) === -->
-      <section id="docsUnderMap" aria-label="Documentation et cartes">
-        <div class="cardTitle" style="margin:0;">Documentation &amp; Cartes</div>
-        <div class="hint" style="margin-top:6px;">
-          Téléchargez le document officiel de présentation et la carte au format A4 (image).
+      <!-- ✅ MODIF: on met la carte + le nouveau panneau dans un "body" scrollable -->
+      <div class="mapBody">
+        <div class="mapInner">
+          <div id="map"></div>
         </div>
 
-        <div class="docsGrid">
-          <div class="docsPreview">
-            <div class="dlTitle" style="margin:0;">
-              <span class="tag admin">PDF</span> Document officiel
-            </div>
-            <div class="docsActions">
-              <a class="btn" href="docs/document_officiel.pdf" target="_blank" rel="noopener">Ouvrir</a>
-              <a class="btn" href="docs/document_officiel.pdf" download>Télécharger</a>
-            </div>
-            <div class="hint" style="margin-top:0;">Fichier : <b>docs/document_officiel.pdf</b></div>
-          </div>
+        <!-- ✅ NOUVELLE SECTION (sous la carte, tous écrans) -->
+        <div class="card" id="docsPanel" style="margin-top:12px;">
+          <div class="cardTitle">Documentation &amp; Cartes</div>
 
-          <div class="docsPreview">
-            <div class="dlTitle" style="margin:0;">
-              <span class="tag points">A4</span> Carte (JPG)
+          <div class="dl">
+            <div class="dlItem">
+              <div class="dlTitle"><span class="tag admin">DOCS</span> Ressources officielles</div>
+              <div class="dlLinks">
+                <a class="btn" href="docs/presentation_officielle.pdf" target="_blank" rel="noopener">Documentation officielle</a>
+                <a class="btn" href="docs/carte_A4.pdf" target="_blank" rel="noopener">Carte officielle en A4</a>
+              </div>
+              <div class="hint">
+                Pour toute information complémentaire, notamment pour l’impression de la carte au format A0 ou pour toute demande relative aux cartes administratives des 15 départements, veuillez vous rendre à l’Institut Géographique National (IGN), situé Avenue de l’Union Africaine, place du marché Total, en face de l’établissement Guénin
+              </div>
             </div>
-
-            <div class="docsImgWrap">
-              <img src="docs/carte_A4.jpg" alt="Carte A4 (JPG)">
-            </div>
-
-            <div class="docsActions">
-              <a class="btn" href="docs/carte_A4.jpg" target="_blank" rel="noopener">Aperçu</a>
-              <a class="btn" href="docs/carte_A4.jpg" download>Télécharger</a>
-            </div>
-            <div class="hint" style="margin-top:0;">Fichier : <b>docs/carte_A4.jpg</b></div>
           </div>
         </div>
 
-        <div class="docsNote">
-          <b>Pour toute information complémentaire, notamment pour l’impression de la carte au format A0 ou pour toute demande relative aux cartes administratives des 15 départements, veuillez vous rendre à l’Institut Géographique National (IGN), situé Avenue de l’Union Africaine, place du marché Total, en face de l’établissement Guénin.</b>
-        </div>
-      </section>
-
-      <!-- SLOT : sur mobile, on mettra ici la carte Téléchargements (#downloads) -->
-      <div id="downloadsMobileSlot"></div>
-    </div>
+        <!-- SLOT : sur mobile, on mettra ici la carte Téléchargements (#downloads) -->
+        <div id="downloadsMobileSlot"></div>
+      </div>
+    </section>
   </div>
 
   <!-- overlay + panel mobile laissés en place (mais MASQUÉS en CSS mobile) pour ne rien casser -->
@@ -963,12 +910,14 @@
       }
     }
 
+    /* ===== PATCH : déplacement #downloads sous la carte sur mobile ===== */
     function moveDownloadsOnMobile(){
       const downloads = document.getElementById("downloads");
       const desktopAside = document.getElementById("desktopAside");
       const slot = document.getElementById("downloadsMobileSlot");
       if(!downloads || !desktopAside || !slot) return;
 
+      // ancre pour remettre au bon endroit en desktop
       let anchor = document.getElementById("downloadsAnchor");
       if(!anchor){
         anchor = document.createElement("div");
@@ -980,12 +929,14 @@
       if(isMobile){
         if(downloads.parentNode !== slot) slot.appendChild(downloads);
       }else{
+        // remet dans l'aside juste après l'ancre
         if(downloads.parentNode !== desktopAside){
           anchor.parentNode.insertBefore(downloads, anchor.nextSibling);
         }
       }
     }
 
+    /* ===== menu : on garde le code, mais on évite erreurs si éléments masqués/supprimés ===== */
     function openPanel(){
       if(!panelMobile || !overlay) return;
       panelMobile.classList.add("open");
@@ -1045,6 +996,7 @@
 
       setStatus(ok, fail);
 
+      // applique le patch au chargement + aux changements d’écran
       moveDownloadsOnMobile();
       window.addEventListener("resize", () => {
         moveDownloadsOnMobile();
@@ -1056,6 +1008,9 @@
           map.invalidateSize();
         }, 250);
       });
+
+      // IMPORTANT: après ajout du wrapper, Leaflet a parfois besoin d'un invalidateSize au 1er paint
+      setTimeout(() => map.invalidateSize(), 250);
     })();
   </script>
 </body>
