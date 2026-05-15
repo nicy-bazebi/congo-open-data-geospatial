@@ -9,203 +9,221 @@
 
   <style>
     :root{
-      --text:#eef5ff;
-      --muted:rgba(238,245,255,.72);
-      --line:rgba(255,255,255,.10);
-      --green:#16a34a;
-      --yellow:#f59e0b;
-      --red:#ef4444;
-      --radius:16px;
-      --shadow:0 12px 30px rgba(0,0,0,.35);
-      --bgA: rgba(11,18,32,.88);
-      --panelBg: rgba(255,255,255,.03);
+      --bg:#07120f;
+      --surface:rgba(255,255,255,.92);
+      --text:#f7fbf8;
+      --ink:#10231d;
+      --muted:rgba(247,251,248,.72);
+      --muted-dark:#5c6f68;
+      --line:rgba(255,255,255,.16);
+      --line-dark:rgba(16,35,29,.12);
+      --green:#138a4b;
+      --yellow:#d99a1e;
+      --red:#d64545;
+      --radius:8px;
+      --radius-lg:12px;
+      --shadow:0 18px 45px rgba(0,0,0,.28);
+      --shadow-soft:0 10px 28px rgba(0,0,0,.16);
     }
 
     *{ box-sizing:border-box; }
-    html, body { height: 100%; }
+
+    html, body{ height:100%; }
+
     body{
       margin:0;
-      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
-      background: radial-gradient(1200px 800px at 20% 0%, rgba(22,163,74,.25), transparent 55%),
-                  radial-gradient(900px 700px at 80% 10%, rgba(245,158,11,.22), transparent 55%),
-                  radial-gradient(900px 700px at 40% 90%, rgba(239,68,68,.18), transparent 55%),
-                  linear-gradient(120deg, #071023, #0b1220);
+      font-family: Inter, Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       color:var(--text);
-      overflow: hidden;
+      overflow:hidden;
+      background:
+        linear-gradient(135deg, rgba(7,18,15,.96), rgba(13,29,24,.96)),
+        repeating-linear-gradient(
+          45deg,
+          rgba(255,255,255,.035) 0,
+          rgba(255,255,255,.035) 1px,
+          transparent 1px,
+          transparent 18px
+        );
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(90deg, rgba(19,138,75,.18), transparent 32%, rgba(217,154,30,.12) 65%, rgba(214,69,69,.13)),
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 38%);
+      opacity:.9;
     }
 
     header{
-      position: sticky;
+      position:sticky;
       top:0;
-      z-index: 1000;
+      z-index:1000;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:12px;
-      padding: 12px 16px;
+      gap:16px;
+      padding:14px 18px;
       border-bottom:1px solid var(--line);
-      background: var(--bgA);
-      backdrop-filter: blur(10px);
+      background:rgba(7,18,15,.84);
+      backdrop-filter:blur(18px);
+      box-shadow:0 8px 22px rgba(0,0,0,.2);
     }
 
     .brand{
       display:flex;
       align-items:center;
-      gap:12px;
-      min-width: 0;
-    }
-
-    .logoWrap{
-      width:52px;
-      height:52px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      flex: 0 0 auto;
-    }
-
-    .logoWrap img{
-      max-height: 44px;
-      max-width: 44px;
-      width:auto;
-      height:auto;
-      display:block;
+      min-width:0;
     }
 
     .brandText{
       display:flex;
       flex-direction:column;
-      gap:2px;
-      min-width: 0;
-    }
-
-    .institution{
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-      color: rgba(238,245,255,.88);
+      gap:4px;
+      min-width:0;
     }
 
     .title{
-      font-size: 15px;
-      font-weight: 800;
-      line-height: 1.15;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size:17px;
+      font-weight:850;
+      line-height:1.15;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .subtitle{
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    .statusPill{
+    .statusPill,
+    .mobileMenuBtn{
       display:flex;
       align-items:center;
       gap:10px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.1);
+      color:var(--text);
+      box-shadow:var(--shadow-soft);
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
     }
 
     .dot{
-      width:9px; height:9px; border-radius:999px;
-      background: var(--yellow);
-      box-shadow: 0 0 0 4px rgba(245,158,11,.15);
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:var(--yellow);
+      box-shadow:0 0 0 4px rgba(217,154,30,.18);
     }
-    .dot.ok{ background: var(--green); box-shadow: 0 0 0 4px rgba(22,163,74,.18); }
-    .dot.bad{ background: var(--red); box-shadow: 0 0 0 4px rgba(239,68,68,.18); }
+
+    .dot.ok{
+      background:#34c978;
+      box-shadow:0 0 0 4px rgba(52,201,120,.18);
+    }
+
+    .dot.bad{
+      background:var(--red);
+      box-shadow:0 0 0 4px rgba(214,69,69,.18);
+    }
 
     .wrap{
+      position:relative;
       display:grid;
-      grid-template-columns: 420px 1fr;
-      gap: 14px;
-      padding: 14px;
-      height: calc(100vh - 78px);
-      min-height: 0;
+      grid-template-columns:400px 1fr;
+      gap:16px;
+      padding:16px;
+      height:calc(100vh - 78px);
+      min-height:0;
+    }
+
+    aside,
+    .mapwrap{
+      border:1px solid var(--line);
+      border-radius:var(--radius-lg);
+      background:rgba(255,255,255,.1);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+      min-height:0;
     }
 
     aside{
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panelBg);
-      box-shadow: var(--shadow);
-      padding: 12px;
+      padding:12px;
       overflow:auto;
-      min-height: 0;
+    }
+
+    aside::-webkit-scrollbar,
+    .mapBody::-webkit-scrollbar{ width:9px; }
+
+    aside::-webkit-scrollbar-thumb,
+    .mapBody::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.22);
+      border-radius:999px;
     }
 
     .mapwrap{
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panelBg);
-      box-shadow: var(--shadow);
       overflow:hidden;
       display:flex;
       flex-direction:column;
-      min-height: 0;
     }
 
     .maphead{
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(0,0,0,.16);
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.08);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
 
     .badgeRow{
       display:flex;
       gap:8px;
       align-items:center;
-      flex-wrap: wrap;
+      flex-wrap:wrap;
     }
 
     .miniBadge{
-      font-size: 11px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.05);
-      color: rgba(238,245,255,.9);
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.1);
+      color:rgba(247,251,248,.9);
+      font-weight:750;
     }
 
     .mapBody{
-      flex: 1 1 auto;
-      min-height: 0;
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 12px;
+      flex:1 1 auto;
+      min-height:0;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      padding:12px;
       display:flex;
       flex-direction:column;
       gap:12px;
     }
 
     .mapInner{
-      flex: 0 0 auto;
-      height: calc(100vh - 78px - 14px - 14px - 52px - 24px);
-      min-height: 320px;
-      border:1px solid var(--line);
-      border-radius: var(--radius);
+      flex:0 0 auto;
+      height:calc(100vh - 78px - 32px - 55px - 24px);
+      min-height:340px;
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:var(--radius-lg);
       overflow:hidden;
-      background: rgba(0,0,0,.10);
+      background:#dce7df;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
     }
 
     #map{
@@ -214,11 +232,17 @@
     }
 
     .card{
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(0,0,0,.14);
-      padding: 12px;
-      margin-bottom: 12px;
+      border:1px solid var(--line-dark);
+      border-radius:var(--radius);
+      background:var(--surface);
+      color:var(--ink);
+      padding:14px;
+      margin-bottom:12px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .mapBody .card{
+      margin-bottom:0;
     }
 
     .cardTitle{
@@ -226,175 +250,146 @@
       justify-content:space-between;
       align-items:center;
       gap:10px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      font-size: 13px;
+      font-weight:850;
+      margin-bottom:11px;
+      font-size:13px;
+      color:#0f2a21;
     }
 
     .label{
       display:block;
-      font-size: 12px;
-      color: rgba(238,245,255,.82);
-      margin-bottom: 6px;
+      font-size:12px;
+      color:var(--muted-dark);
+      margin-bottom:7px;
+      font-weight:700;
     }
 
     select{
       width:100%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
+      padding:11px 12px;
+      border-radius:var(--radius);
+      border:1px solid rgba(16,35,29,.16);
+      background:#fff;
+      color:#10231d;
       outline:none;
+      font-weight:700;
+      box-shadow:0 1px 0 rgba(16,35,29,.05);
+    }
+
+    select:focus{
+      border-color:rgba(19,138,75,.55);
+      box-shadow:0 0 0 4px rgba(19,138,75,.12);
     }
 
     .check{
       display:flex;
       align-items:center;
       gap:10px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      margin-bottom: 8px;
+      padding:10px 11px;
+      border-radius:var(--radius);
+      border:1px solid rgba(16,35,29,.11);
+      background:#f8fbf9;
+      margin-bottom:8px;
+      color:#17342a;
+      font-size:13px;
+      font-weight:750;
+    }
+
+    .check input{
+      width:16px;
+      height:16px;
+      accent-color:var(--green);
     }
 
     .btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border:1px solid var(--line);
+      min-height:38px;
+      padding:9px 12px;
+      border-radius:var(--radius);
+      border:1px solid rgba(16,35,29,.14);
       text-decoration:none;
-      color: var(--text);
-      background: rgba(255,255,255,.06);
+      color:#0f2a21;
+      background:#fff;
       cursor:pointer;
       user-select:none;
-      white-space: nowrap;
+      white-space:nowrap;
+      font-size:12px;
+      font-weight:850;
+      box-shadow:0 2px 8px rgba(16,35,29,.08);
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
-    .btn:hover{ background: rgba(255,255,255,.10); }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(19,138,75,.35);
+      box-shadow:0 8px 18px rgba(16,35,29,.14);
+    }
 
     .hint{
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.4;
-      margin-top: 8px;
+      font-size:12px;
+      color:var(--muted-dark);
+      line-height:1.5;
+      margin-top:8px;
     }
 
     .dl{
       display:flex;
       flex-direction:column;
       gap:10px;
-      margin-top: 8px;
+      margin-top:10px;
     }
+
     .dlItem{
-      border:1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px 12px;
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(16,35,29,.11);
+      border-radius:var(--radius);
+      padding:11px;
+      background:#f8fbf9;
     }
+
     .dlTitle{
-      font-weight:800;
+      font-weight:850;
       font-size:13px;
-      margin-bottom:6px;
+      margin-bottom:8px;
       display:flex;
       align-items:center;
-      gap:10px;
+      gap:9px;
+      color:#143329;
     }
+
     .dlLinks{
       display:flex;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
     }
+
     .tag{
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.05);
-      color: rgba(238,245,255,.9);
-    }
-    .tag.admin{ border-color: rgba(22,163,74,.35); }
-    .tag.points{ border-color: rgba(245,158,11,.35); }
-    .tag.routes{ border-color: rgba(239,68,68,.35); }
-
-    .leaflet-popup-content-wrapper{ border-radius: 14px; }
-
-    .lbl{
-      background: rgba(11,18,32,.88);
-      color: #eef5ff;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 10px;
-      padding: 4px 8px;
-      font-weight: 800;
-      font-size: 11px;
-      box-shadow: 0 8px 18px rgba(0,0,0,.25);
-      white-space: nowrap;
-    }
-    .leaflet-tooltip.lbl::before{
-      border-top-color: rgba(11,18,32,.88);
+      font-size:10px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid transparent;
+      background:#edf4f0;
+      color:#17342a;
+      font-weight:900;
     }
 
-    .mobileMenuBtn{
-      display:none;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      cursor:pointer;
-      user-select:none;
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      font-weight: 800;
-      font-size: 12px;
-      white-space: nowrap;
+    .tag.admin{
+      background:#e8f5ee;
+      color:#11633a;
+      border-color:rgba(19,138,75,.2);
     }
 
-    .overlay{
-      display:none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      z-index: 1400;
-    }
-    .panelMobile{ display:none; }
-
-    #downloadsMobileSlot{ display:none; }
-    #mobileControlsSlot{ display:none; }
-
-    @media (max-width: 900px){
-      body{ overflow: auto; }
-      .wrap{
-        grid-template-columns: 1fr;
-        gap: 12px;
-        padding: 12px;
-        height: auto;
-      }
-      aside{ display:none; }
-      .mapwrap{ border-radius: var(--radius); }
-      .mapBody{ padding: 12px; }
-      .mapInner{
-        height: 62vh;
-        min-height: 360px;
-      }
-
-      #mobileControlsSlot{ display:block; }
-      #downloadsMobileSlot{ display:block; }
-
-      .mobileMenuBtn{ display:none !important; }
-      .overlay{ display:none !important; }
-      .panelMobile{ display:none !important; }
+    .tag.points{
+      background:#fff4da;
+      color:#81560a;
+      border-color:rgba(217,154,30,.28);
     }
 
-    @media (max-width: 520px){
-      header{ padding: 10px 12px; }
-      .logoWrap{ width:44px; height:44px; border-radius: 12px; }
-      .logoWrap img{ max-width: 36px; max-height: 36px; }
-      .title{ font-size: 14px; white-space: normal; }
-      .subtitle{ display:none; }
+    .tag.routes{
+      background:#fdecec;
+      color:#982f2f;
+      border-color:rgba(214,69,69,.25);
     }
 
     .docBtns{
@@ -402,19 +397,118 @@
       gap:10px;
       flex-wrap:wrap;
     }
+
+    .leaflet-control-zoom a{
+      color:#10231d !important;
+    }
+
+    .leaflet-popup-content-wrapper{
+      border-radius:var(--radius-lg);
+      box-shadow:0 16px 35px rgba(0,0,0,.24);
+    }
+
+    .lbl{
+      background:rgba(7,18,15,.9);
+      color:#f7fbf8;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      padding:5px 9px;
+      font-weight:850;
+      font-size:11px;
+      box-shadow:0 8px 18px rgba(0,0,0,.24);
+      white-space:nowrap;
+    }
+
+    .leaflet-tooltip.lbl::before{
+      border-top-color:rgba(7,18,15,.9);
+    }
+
+    .mobileMenuBtn,
+    .overlay,
+    .panelMobile,
+    #downloadsMobileSlot,
+    #mobileControlsSlot{
+      display:none;
+    }
+
+    @media (max-width:900px){
+      body{ overflow:auto; }
+
+      header{
+        align-items:flex-start;
+        padding:12px;
+      }
+
+      .wrap{
+        grid-template-columns:1fr;
+        gap:12px;
+        padding:12px;
+        height:auto;
+      }
+
+      aside{ display:none; }
+
+      .mapBody{ padding:12px; }
+
+      .mapInner{
+        height:62vh;
+        min-height:360px;
+      }
+
+      #mobileControlsSlot,
+      #downloadsMobileSlot{
+        display:block;
+      }
+
+      #mobileControlsSlot .card,
+      #downloadsMobileSlot .card{
+        margin-bottom:12px;
+      }
+
+      .mobileMenuBtn,
+      .overlay,
+      .panelMobile{
+        display:none !important;
+      }
+    }
+
+    @media (max-width:520px){
+      header{
+        gap:10px;
+      }
+
+      .title{
+        font-size:14px;
+        white-space:normal;
+      }
+
+      .subtitle{
+        display:none;
+      }
+
+      .statusPill{
+        padding:8px 10px;
+      }
+
+      .maphead{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .docBtns .btn,
+      .dlLinks .btn{
+        flex:1 1 auto;
+      }
+    }
   </style>
 </head>
 
 <body>
   <header>
     <div class="brand">
-      <div class="logoWrap" title="Institut Géographique National">
-        <img src="assets/ign_logo.png" alt="IGN">
-      </div>
       <div class="brandText">
-        <div class="institution">Institut Géographique National</div>
         <div class="title">Portail Organisation Administrative — République du Congo</div>
-        <div class="subtitle">Visualisation & téléchargement : limites administratives, chefs-lieux et réseau routier structurant</div>
+        <div class="subtitle">Visualisation &amp; téléchargement : limites administratives, chefs-lieux et réseau routier structurant</div>
       </div>
     </div>
 
@@ -437,7 +531,6 @@
         <label class="label">Jeu de données affiché</label>
         <select id="level">
           <option value="all">Toutes les couches visibles</option>
-          <!-- ✅ ordre demandé -->
           <option value="Chef_lieu_departement">Chefs-lieux de départements</option>
           <option value="Chef_lieu_district">Chefs-lieux de districts</option>
           <option value="Reseau_routier_structurant">Réseau routier structurant</option>
@@ -448,7 +541,6 @@
 
       <div class="card" id="layersCard">
         <div class="cardTitle">Couches</div>
-        <!-- ✅ ordre demandé -->
         <label class="check"><input type="checkbox" id="t_cld" checked> <span>Chefs-lieux de départements</span></label>
         <label class="check"><input type="checkbox" id="t_cldist" checked> <span>Chefs-lieux de districts</span></label>
         <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
@@ -518,7 +610,6 @@
         <div class="card" id="docsPanel">
           <div class="cardTitle">Documentation &amp; Cartes</div>
           <div class="docBtns">
-            <!-- ✅ SEULE MODIF : liens absolus + ouverture nouvel onglet -->
             <a class="btn"
                href="https://nicy-bazebi.github.io/congo-open-data-geospatial/docs/presentation_officielle.pdf"
                target="_blank" rel="noopener">
@@ -531,7 +622,7 @@
             </a>
           </div>
           <div class="hint">
-            Pour toute information complémentaire, notamment pour l’impression de la carte au format A0 ou pour toute demande relative aux cartes administratives des 15 départements, veuillez vous rendre à l’Institut Géographique National (IGN), situé Avenue de l’Union Africaine, place du marché Total, en face de l’établissement Guénin
+            Pour toute information complémentaire, notamment pour l’impression de la carte au format A0 ou pour toute demande relative aux cartes administratives des 15 départements, veuillez vous rendre à l’Institut Géographique National (IGN), situé Avenue de l’Union Africaine, place du marché Total, en face de l’établissement Guénin.
           </div>
         </div>
       </div>
@@ -545,7 +636,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    /* ✅ ordre demandé (utilisé pour le chargement + l’interface si tu la relies ensuite) */
     const DATASETS = [
       {
         key: "Chef_lieu_departement",
@@ -586,13 +676,6 @@
 
     const elStatusText = document.getElementById("statusText");
     const elStatusDot = document.getElementById("statusDot");
-    const elLevelDesktop = document.getElementById("level");
-    const elLevelMobile = document.getElementById("level_m"); // (non utilisé en mobile ici)
-
-    const panelMobile = document.getElementById("panelMobile");
-    const overlay = document.getElementById("overlay");
-    const openPanelBtn = document.getElementById("openPanelBtn");
-    const closePanelBtn = document.getElementById("closePanelBtn");
 
     let layersByKey = {};
     let boundsAll = null;
@@ -603,10 +686,10 @@
         elStatusText.textContent = `OK ${ok} couche(s)`;
       } else if(ok === 0){
         elStatusDot.className = "dot bad";
-        elStatusText.textContent = `OK 0 • ⚠️ ${fail} manquant(s)`;
+        elStatusText.textContent = `OK 0 • ${fail} manquant(s)`;
       } else {
         elStatusDot.className = "dot";
-        elStatusText.textContent = `OK ${ok} • ⚠️ ${fail} manquant(s)`;
+        elStatusText.textContent = `OK ${ok} • ${fail} manquant(s)`;
       }
     }
 
@@ -634,12 +717,12 @@
 
     function styleByKey(key){
       if(key === "Limites_departements_congo"){
-        return { color: "#000000", weight: 2, fillOpacity: 0.03 };
+        return { color: "#138a4b", weight: 2.2, fillColor: "#138a4b", fillOpacity: 0.055 };
       }
       if(key === "Reseau_routier_structurant"){
-        return { color: "#ef4444", weight: 2, opacity: 0.9 };
+        return { color: "#d64545", weight: 2, opacity: 0.9 };
       }
-      return { color: "#f59e0b", weight: 2, opacity: 0.9 };
+      return { color: "#d99a1e", weight: 2, opacity: 0.9 };
     }
 
     const redPinIcon = L.divIcon({
@@ -648,8 +731,8 @@
       iconAnchor: [9, 18],
       html: `
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13z" fill="#ef4444"/>
-          <circle cx="12" cy="9" r="2.6" fill="#0b1220"/>
+          <path d="M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13z" fill="#d64545"/>
+          <circle cx="12" cy="9" r="2.6" fill="#07120f"/>
         </svg>
       `
     });
@@ -658,7 +741,7 @@
       if(dsKey === "Chef_lieu_departement" || dsKey === "Chef_lieu_district"){
         return L.marker(latlng, { icon: redPinIcon });
       }
-      return L.circleMarker(latlng, { radius: 6, color: "#0b1220", weight: 1, fillColor: "#f59e0b", fillOpacity: 0.95 });
+      return L.circleMarker(latlng, { radius: 6, color: "#07120f", weight: 1, fillColor: "#d99a1e", fillOpacity: 0.95 });
     }
 
     function fmtNum(x){
@@ -737,7 +820,6 @@
       return layer;
     }
 
-    /* ✅ ordre demandé aussi pour la synchro (checkbox -> couche) */
     const toggleMap = [
       { dsKey: "Chef_lieu_departement",      d: "t_cld" },
       { dsKey: "Chef_lieu_district",         d: "t_cldist" },
@@ -820,8 +902,14 @@
 
       let ok = 0, fail = 0;
       for(const ds of DATASETS){
-        try{ await loadDataset(ds); ok++; }
-        catch(e){ console.error(e); fail++; }
+        try{
+          await loadDataset(ds);
+          ok++;
+        }
+        catch(e){
+          console.error(e);
+          fail++;
+        }
       }
 
       for(const ds of DATASETS){
@@ -832,6 +920,7 @@
           if(cb) cb.checked = isOn;
         }
       }
+
       syncVisibility();
 
       if(boundsAll?.isValid()) map.fitBounds(boundsAll, {padding:[20,20]});
@@ -850,6 +939,7 @@
         moveDownloadsOnMobile();
         map.invalidateSize();
       });
+
       window.addEventListener("orientationchange", () => {
         setTimeout(() => {
           moveLayersCardOnMobile();
