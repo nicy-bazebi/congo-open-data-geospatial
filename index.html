@@ -334,64 +334,6 @@
       margin-top:8px;
     }
 
-    .dl{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:10px;
-    }
-
-    .dlItem{
-      border:1px solid rgba(16,35,29,.11);
-      border-radius:var(--radius);
-      padding:11px;
-      background:#f8fbf9;
-    }
-
-    .dlTitle{
-      font-weight:850;
-      font-size:13px;
-      margin-bottom:8px;
-      display:flex;
-      align-items:center;
-      gap:9px;
-      color:#143329;
-    }
-
-    .dlLinks{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .tag{
-      font-size:10px;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid transparent;
-      background:#edf4f0;
-      color:#17342a;
-      font-weight:900;
-    }
-
-    .tag.admin{
-      background:#e8f5ee;
-      color:#11633a;
-      border-color:rgba(19,138,75,.2);
-    }
-
-    .tag.points{
-      background:#fff4da;
-      color:#81560a;
-      border-color:rgba(217,154,30,.28);
-    }
-
-    .tag.routes{
-      background:#fdecec;
-      color:#982f2f;
-      border-color:rgba(214,69,69,.25);
-    }
-
     .docBtns{
       display:flex;
       gap:10px;
@@ -426,7 +368,6 @@
     .mobileMenuBtn,
     .overlay,
     .panelMobile,
-    #downloadsMobileSlot,
     #mobileControlsSlot{
       display:none;
     }
@@ -455,13 +396,11 @@
         min-height:360px;
       }
 
-      #mobileControlsSlot,
-      #downloadsMobileSlot{
+      #mobileControlsSlot{
         display:block;
       }
 
-      #mobileControlsSlot .card,
-      #downloadsMobileSlot .card{
+      #mobileControlsSlot .card{
         margin-bottom:12px;
       }
 
@@ -495,8 +434,7 @@
         flex-direction:column;
       }
 
-      .docBtns .btn,
-      .dlLinks .btn{
+      .docBtns .btn{
         flex:1 1 auto;
       }
     }
@@ -508,7 +446,7 @@
     <div class="brand">
       <div class="brandText">
         <div class="title">Portail Organisation Administrative — République du Congo</div>
-        <div class="subtitle">Visualisation &amp; téléchargement : limites administratives, chefs-lieux et réseau routier structurant</div>
+        <div class="subtitle">Visualisation : limites administratives, chefs-lieux et réseau routier structurant</div>
       </div>
     </div>
 
@@ -546,49 +484,6 @@
         <label class="check"><input type="checkbox" id="t_routes"> <span>Réseau routier structurant</span></label>
         <label class="check"><input type="checkbox" id="t_dep" checked> <span>Limites des départements</span></label>
       </div>
-
-      <div class="card" id="downloads">
-        <div class="cardTitle">Téléchargements</div>
-        <div class="hint">Formats : SHP (ZIP) pour SIG • GeoJSON pour web • Metadata (txt).</div>
-
-        <div class="dl">
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag admin">ADMIN</span> Limites des départements</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Limites_departements_congo/Limites_departements_congo.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Limites_departements_congo/limites_departements_congo.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Limites_departements_congo/metadata.txt">Metadata</a>
-            </div>
-          </div>
-
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de départements</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Chef_lieu_departement/Chef_lieu_departement.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Chef_lieu_departement/chef_lieu_departement.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Chef_lieu_departement/metadata.txt">Metadata</a>
-            </div>
-          </div>
-
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag points">POINTS</span> Chefs-lieux de districts</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Chef_lieu_district/Chef_lieu_district.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Chef_lieu_district/chef_lieu_district.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Chef_lieu_district/metadata.txt">Metadata</a>
-            </div>
-          </div>
-
-          <div class="dlItem">
-            <div class="dlTitle"><span class="tag routes">ROUTES</span> Réseau routier structurant</div>
-            <div class="dlLinks">
-              <a class="btn" href="data/shp/Reseau_routier_structurant/Reseau_routier_structurant.zip">SHP (ZIP)</a>
-              <a class="btn" href="data/geojson/Reseau_routier_structurant/reseau_routier_structurant.geojson">GeoJSON</a>
-              <a class="btn" href="metadata/Reseau_routier_structurant/metadata.txt">Metadata</a>
-            </div>
-          </div>
-        </div>
-      </div>
     </aside>
 
     <section class="mapwrap">
@@ -597,7 +492,7 @@
           <span class="miniBadge">Fond : OpenStreetMap</span>
           <span class="miniBadge">Portail : GitHub Pages</span>
         </div>
-        <span class="miniBadge">© IGN / Open Data</span>
+        <span class="miniBadge">© IGN / Consultation</span>
       </div>
 
       <div class="mapBody">
@@ -627,8 +522,6 @@
         </div>
       </div>
     </section>
-
-    <div id="downloadsMobileSlot"></div>
   </div>
 
   <div class="overlay" id="overlay"></div>
@@ -851,29 +744,6 @@
       }
     }
 
-    function moveDownloadsOnMobile(){
-      const downloads = document.getElementById("downloads");
-      const desktopAside = document.getElementById("desktopAside");
-      const slot = document.getElementById("downloadsMobileSlot");
-      if(!downloads || !desktopAside || !slot) return;
-
-      let anchor = document.getElementById("downloadsAnchor");
-      if(!anchor){
-        anchor = document.createElement("div");
-        anchor.id = "downloadsAnchor";
-        downloads.parentNode.insertBefore(anchor, downloads);
-      }
-
-      const isMobile = window.matchMedia("(max-width: 900px)").matches;
-      if(isMobile){
-        if(downloads.parentNode !== slot) slot.appendChild(downloads);
-      }else{
-        if(downloads.parentNode !== desktopAside){
-          anchor.parentNode.insertBefore(downloads, anchor.nextSibling);
-        }
-      }
-    }
-
     function moveLayersCardOnMobile(){
       const layersCard = document.getElementById("layersCard");
       const desktopAside = document.getElementById("desktopAside");
@@ -930,20 +800,17 @@
       setStatus(ok, fail);
 
       moveLayersCardOnMobile();
-      moveDownloadsOnMobile();
 
       setTimeout(() => map.invalidateSize(true), 50);
 
       window.addEventListener("resize", () => {
         moveLayersCardOnMobile();
-        moveDownloadsOnMobile();
         map.invalidateSize();
       });
 
       window.addEventListener("orientationchange", () => {
         setTimeout(() => {
           moveLayersCardOnMobile();
-          moveDownloadsOnMobile();
           map.invalidateSize();
         }, 250);
       });
